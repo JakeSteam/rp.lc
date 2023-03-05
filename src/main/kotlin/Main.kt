@@ -1,19 +1,22 @@
 import java.awt.image.BufferedImage
 import java.io.File
+import java.nio.file.Paths
 import javax.imageio.ImageIO
 
 fun main(args: Array<String>) {
+    val projectDir = Paths.get("").toAbsolutePath().toString()
     val inputDir = "/input/"
     val outputDir = "/output/"
 
-    val inputPath = locateImage(inputDir) ?: return
+    val inputPath = locateImage(projectDir, inputDir) ?: return
     val inputData = loadImage(inputPath)
     val outputData = convertImage(inputData)
-    saveOutput(outputDir, inputPath.name, outputData)
+    saveOutput(projectDir, outputDir, inputPath.name, outputData)
 }
 
-fun locateImage(inputDir: String): File? {
-    return File(inputDir).listFiles()?.firstOrNull()
+fun locateImage(projectDir: String, inputDir: String): File? {
+    val inputPath = File(projectDir + inputDir)
+    return inputPath.listFiles()?.firstOrNull()
 }
 
 fun loadImage(inputFile: File): BufferedImage {
@@ -26,7 +29,7 @@ fun convertImage(inputData: BufferedImage): BufferedImage {
     return inputData
 }
 
-fun saveOutput(outputDir: String, outputName: String, outputData: BufferedImage) {
-    val outputFile = File(outputDir, outputName)
+fun saveOutput(projectDir: String, outputDir: String, outputName: String, outputData: BufferedImage) {
+    val outputFile = File(projectDir + outputDir, outputName)
     ImageIO.write(outputData, "png", outputFile)
 }

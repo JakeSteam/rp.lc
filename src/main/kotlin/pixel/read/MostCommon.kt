@@ -6,7 +6,7 @@ class MostCommon {
 
     enum class MostCommonFilter { Outer, Inner, All }
 
-    fun find(inputData: BufferedImage, filter: MostCommonFilter): Int {
+    fun find(inputData: Array<IntArray>, filter: MostCommonFilter): Int {
         return when (filter) {
             MostCommonFilter.Outer -> getMostCommonOuterPixel(inputData)
             MostCommonFilter.Inner -> getMostCommonInnerPixel(inputData)
@@ -14,30 +14,30 @@ class MostCommon {
         }
     }
 
-    private fun getMostCommonOuterPixel(inputData: BufferedImage): Int {
+    private fun getMostCommonOuterPixel(inputData: Array<IntArray>): Int {
         FetchLog.d("Looking for most common outer pixel")
         val pixelColours: MutableMap<Int, Int> = HashMap()
-        val heightPixels = inputData.height - 1
-        val widthPixels = inputData.width - 1
+        val heightPixels = inputData.size - 1
+        val widthPixels = inputData[0].size - 1
 
         // Top & bottom row
         for (x in 0..widthPixels) {
-            val topPixel = inputData.getRGB(x, 0)
+            val topPixel = inputData[0][x]
             FetchLog.pixel(x, 0, topPixel)
             pixelColours.merge(topPixel, 1, Int::plus)
 
-            val bottomPixel = inputData.getRGB(x, heightPixels)
+            val bottomPixel = inputData[heightPixels][x]
             FetchLog.pixel(x, heightPixels, bottomPixel)
             pixelColours.merge(bottomPixel, 1, Int::plus)
         }
 
         // Left & right column (excluding top & bottom pixels)
         for (y in 1 until heightPixels) {
-            val leftPixel = inputData.getRGB(0, y)
+            val leftPixel = inputData[y][0]
             FetchLog.pixel(0, y, leftPixel)
             pixelColours.merge(leftPixel, 1, Int::plus)
 
-            val rightPixel = inputData.getRGB(widthPixels, y)
+            val rightPixel = inputData[y][widthPixels]
             FetchLog.pixel(widthPixels, y, leftPixel)
             pixelColours.merge(rightPixel, 1, Int::plus)
         }
@@ -45,13 +45,13 @@ class MostCommon {
         return pixelColours.getTop()
     }
 
-    private fun getMostCommonInnerPixel(inputData: BufferedImage): Int {
+    private fun getMostCommonInnerPixel(inputData: Array<IntArray>): Int {
         FetchLog.d("Looking for most common inner pixel")
         val pixelColours: MutableMap<Int, Int> = HashMap()
 
-        for (y in 0 until inputData.height - 1) {
-            for (x in 0 until inputData.width - 1) {
-                val pixel = inputData.getRGB(x, y)
+        for (y in 0 until inputData.size - 1) {
+            for (x in 0 until inputData[0].size - 1) {
+                val pixel = inputData[y][x]
                 FetchLog.pixel(x, y, pixel)
                 pixelColours.merge(pixel, 1, Int::plus)
             }
@@ -60,13 +60,13 @@ class MostCommon {
         return pixelColours.getTop()
     }
 
-    private fun getMostCommonPixel(inputData: BufferedImage): Int {
+    private fun getMostCommonPixel(inputData: Array<IntArray>): Int {
         FetchLog.d("Looking for most common pixel")
         val pixelColours: MutableMap<Int, Int> = HashMap()
 
-        for (y in 0 until inputData.height) {
-            for (x in 0 until inputData.width) {
-                val pixel = inputData.getRGB(x, y)
+        for (y in inputData.indices) {
+            for (x in 0 until inputData[0].size) {
+                val pixel = inputData[y][x]
                 FetchLog.pixel(x, y, pixel)
                 pixelColours.merge(pixel, 1, Int::plus)
             }

@@ -6,29 +6,31 @@ import java.awt.image.BufferedImage
 
 fun main(args: Array<String>) {
     val inputData = ImageReader().loadImage()
-    if (inputData.image == null || inputData.filename == null
-        || inputData.image.width < 10 || inputData.image.height < 10) return
+    if (inputData == null || inputData.bytes.size < 10 || inputData.bytes[1].size < 10) {
+        return
+    }
 
-    val outputData = convertImage(inputData.image)
+    val outputData = convertImage(inputData.bytes)
 
     ImageWriter().save(outputData, inputData.filename)
 }
 
-fun convertImage(inputData: BufferedImage): BufferedImage {
-    val outerPixelColor = MostCommon().find(inputData, MostCommon.MostCommonFilter.Outer)
+fun convertImage(bytes: Array<IntArray>): Array<IntArray> {
+    val outerPixelColor = MostCommon().find(bytes, MostCommon.MostCommonFilter.Outer)
     val water = Color(0, 0, 255, 255).rgb
     val land = Color(0, 92, 0, 255).rgb
 
+    val output = Array(bytes.size) { IntArray(bytes[0].size) }
+
     // Need to apply all logic to pixel map here
     // Then can write entire array to file
-    for (y in 0 until inputData.height) {
-        for (x in 0 until inputData.width) {
-            //println("Writing to $x, $y")
-            val pixel = inputData.getRGB(x, y)
+    for (y in bytes.indices) {
+        for (x in bytes[0].indices) {
+            val pixel = bytes[y][x]
             val colour = if (pixel == outerPixelColor) water else land
-            inputData.setRGB(x, y, colour)
+            output[y][x] = colour
         }
     }
 
-    return inputData
+    return output
 }

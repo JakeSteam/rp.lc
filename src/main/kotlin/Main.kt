@@ -1,5 +1,6 @@
 import file.ImageReader
 import file.ImageWriter
+import pixel.colour.HexReader
 import pixel.read.MostCommon
 import java.awt.Color
 import java.awt.image.BufferedImage
@@ -17,8 +18,9 @@ fun main(args: Array<String>) {
 
 fun convertImage(bytes: Array<IntArray>): Array<IntArray> {
     val outerPixelColor = MostCommon().find(bytes, MostCommon.MostCommonFilter.Outer)
-    val water = Color(0, 0, 255, 255).rgb
-    val land = Color(0, 92, 0, 255).rgb
+
+    val water = HexReader.toColor("#3383FF")!!.rgb
+    val land = HexReader.toColor("#10A949")!!.rgb
 
     val output = Array(bytes.size) { IntArray(bytes[0].size) }
 

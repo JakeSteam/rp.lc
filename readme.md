@@ -8,7 +8,10 @@ For example, there could be a "Anthill" recipe that defines the rules for an ant
 
 ## What can it do currently?
 
-Well, not much. It can load a local image, change a pixel's colour, and save the updated image.
+Nothing much. It can load an image from `/input/` and perform very basic logic on it:
+1. Fetch the edge pixels of the image.
+2. Work out the most common colour.
+3. Replace all those pixels with "water", and all others with "land".›
 
 ## How can I use it?
 

@@ -12,7 +12,6 @@ class ImageWriter {
         val output = getOutputPath(filename)
 
         val image = BufferedImage(bytes[0].size, bytes.size, BufferedImage.TYPE_INT_ARGB)
-        // What does .setRGB area do?
         for (y in bytes.indices) {
             for (x in bytes[0].indices) {
                 image.setRGB(x, y, bytes[y][x])

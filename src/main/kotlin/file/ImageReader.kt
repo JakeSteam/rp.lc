@@ -1,8 +1,10 @@
 package file
 
+import java.awt.Image
 import java.awt.image.BufferedImage
 import java.awt.image.DataBufferByte
 import java.io.File
+import java.io.IOException
 import java.nio.file.Paths
 import javax.imageio.ImageIO
 
@@ -15,6 +17,7 @@ class ImageReader {
         val inputDir = getInputDir()
         val validFile = getFirstValidFile(inputDir) ?: return null
         val image = ImageIO.read(validFile)
+        //val scaledImage = resizeImage(image, 100, 100)
         val bytes = imageToArray(image)
         return ImageReaderResult(bytes, validFile.name)
     }

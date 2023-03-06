@@ -1,4 +1,4 @@
-package file
+package image
 
 import java.awt.image.BufferedImage
 import java.io.File
@@ -15,7 +15,7 @@ class ImageWriter {
         for (y in bytes.indices) {
             for (x in bytes[0].indices) {
                 image.setRGB(x, y, bytes[y][x])
-                FileLog.pixel(x, y, bytes[y][x])
+                ImageLog.pixel(x, y, bytes[y][x])
             }
         }
 

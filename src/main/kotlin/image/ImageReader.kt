@@ -1,10 +1,8 @@
-package file
+package image
 
-import java.awt.Image
 import java.awt.image.BufferedImage
 import java.awt.image.DataBufferByte
 import java.io.File
-import java.io.IOException
 import java.nio.file.Paths
 import javax.imageio.ImageIO
 

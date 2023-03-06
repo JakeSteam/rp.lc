@@ -1,9 +1,7 @@
-import file.ImageReader
-import file.ImageWriter
+import image.ImageReader
+import image.ImageWriter
 import pixel.colour.HexReader
 import pixel.read.MostCommon
-import java.awt.Color
-import java.awt.image.BufferedImage
 
 fun main(args: Array<String>) {
     val inputData = ImageReader().loadImage()

@@ -28,14 +28,14 @@ fun loadImage(inputFile: File): BufferedImage {
 }
 
 fun convertImage(inputData: BufferedImage): BufferedImage {
-    val outerPixelColor = getModeOuterPixel(inputData).rgb
+    val outerPixelColor = getModeOuterPixel(inputData)
     val water = Color(0, 0, 255, 255).rgb
     val land = Color(0, 92, 0, 255).rgb
 
-    println("Writing water & land values")
+    //println("Writing water & land values")
     for (y in 0 until inputData.height) {
         for (x in 0 until inputData.width) {
-            println("Writing to $x, $y")
+            //println("Writing to $x, $y")
             val pixel = inputData.getRGB(x, y)
             val colour = if (pixel == outerPixelColor) water else land
             inputData.setRGB(x, y, colour)
@@ -45,18 +45,18 @@ fun convertImage(inputData: BufferedImage): BufferedImage {
     return inputData
 }
 
-fun getModeOuterPixel(inputData: BufferedImage): Color {
+fun getModeOuterPixel(inputData: BufferedImage): Int {
     val pixelColours : MutableMap<Int, Int> = HashMap()
     println("Looking for mode outer pixel")
 
     // Top & bottom row
     for (x in 0 until inputData.width) {
-        println("Checking x: $x, y: 0")
         val topPixel = inputData.getRGB(x, 0)
+        println("Checked x: $x, y: 0, colour is $topPixel")
         pixelColours.merge(topPixel, 1, Int::plus)
 
-        println("Checking x: $x, y: ${inputData.height - 1}")
         val bottomPixel = inputData.getRGB(x, inputData.height - 1)
+        println("Checked x: $x, y: ${inputData.height - 1}, colour is $bottomPixel")
         pixelColours.merge(bottomPixel, 1, Int::plus)
     }
 
@@ -71,14 +71,10 @@ fun getModeOuterPixel(inputData: BufferedImage): Color {
         pixelColours.merge(rightPixel, 1, Int::plus)
     }
 
-    return Color(pixelColours.toList()
-        .maxByOrNull { it.second }
-        !!.second)
+    return pixelColours.toList().maxByOrNull { it.second }!!.first
 }
 
 fun saveOutput(projectDir: String, outputDir: String, outputName: String, outputData: BufferedImage) {
     val outputFile = File(projectDir + outputDir, outputName)
     ImageIO.write(outputData, "png", outputFile)
 }
-
-data class Pixel(val red: Int, val green: Int, val blue: Int, val alpha: Int)

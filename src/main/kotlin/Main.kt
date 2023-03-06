@@ -11,6 +11,7 @@ fun main(args: Array<String>) {
 
     val inputPath = locateImage(projectDir, inputDir) ?: return
     val inputData = loadImage(inputPath)
+    println("Loaded image ${inputPath.name}. Width ${inputData.width}, height: ${inputData.height}")
     if (inputData.width < 10 || inputData.height < 10) return
 
     val outputData = convertImage(inputData)
@@ -19,7 +20,7 @@ fun main(args: Array<String>) {
 
 fun locateImage(projectDir: String, inputDir: String): File? {
     val inputPath = File(projectDir + inputDir)
-    return inputPath.listFiles()?.firstOrNull()
+    return inputPath.listFiles()?.firstOrNull { file -> file.isFile && file.extension == "png" }
 }
 
 fun loadImage(inputFile: File): BufferedImage {
@@ -29,10 +30,12 @@ fun loadImage(inputFile: File): BufferedImage {
 fun convertImage(inputData: BufferedImage): BufferedImage {
     val outerPixelColor = getModeOuterPixel(inputData).rgb
     val water = Color(0, 0, 255, 255).rgb
-    val land = Color(255, 0, 0, 255).rgb
+    val land = Color(0, 92, 0, 255).rgb
 
-    for (y in 0..inputData.height) {
-        for (x in 0..inputData.width) {
+    println("Writing water & land values")
+    for (y in 0 until inputData.height) {
+        for (x in 0 until inputData.width) {
+            println("Writing to $x, $y")
             val pixel = inputData.getRGB(x, y)
             val colour = if (pixel == outerPixelColor) water else land
             inputData.setRGB(x, y, colour)
@@ -44,25 +47,29 @@ fun convertImage(inputData: BufferedImage): BufferedImage {
 
 fun getModeOuterPixel(inputData: BufferedImage): Color {
     val pixelColours : MutableMap<Int, Int> = HashMap()
+    println("Looking for mode outer pixel")
 
     // Top & bottom row
-    for (x in 0..inputData.width) {
+    for (x in 0 until inputData.width) {
+        println("Checking x: $x, y: 0")
         val topPixel = inputData.getRGB(x, 0)
         pixelColours.merge(topPixel, 1, Int::plus)
 
-        val bottomPixel = inputData.getRGB(x, inputData.height)
+        println("Checking x: $x, y: ${inputData.height - 1}")
+        val bottomPixel = inputData.getRGB(x, inputData.height - 1)
         pixelColours.merge(bottomPixel, 1, Int::plus)
     }
 
     // Left & right column (excluding top & bottom pixels
-    for (y in 1 until inputData.height) {
+    for (y in 1 until inputData.height - 1) {
+        println("Checking x: 0, y: $y")
         val leftPixel = inputData.getRGB(0, y)
         pixelColours.merge(leftPixel, 1, Int::plus)
 
-        val rightPixel = inputData.getRGB(inputData.width, y)
+        println("Checking x: ${inputData.width - 1}, y: $y")
+        val rightPixel = inputData.getRGB(inputData.width - 1, y)
         pixelColours.merge(rightPixel, 1, Int::plus)
     }
-
 
     return Color(pixelColours.toList()
         .maxByOrNull { it.second }

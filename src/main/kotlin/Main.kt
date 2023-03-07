@@ -15,7 +15,7 @@ fun main(args: Array<String>) {
 }
 
 fun convertImage(bytes: Array<IntArray>): Array<IntArray> {
-    val outerPixelColor = MostCommon().find(bytes, MostCommon.MostCommonFilter.Outer)
+    val outerPixelColor = MostCommon.find(bytes, MostCommon.MostCommonFilter.Outer)
 
     val water = HexReader.toColor("#3383FF")!!.rgb
     val land = HexReader.toColor("#10A949")!!.rgb

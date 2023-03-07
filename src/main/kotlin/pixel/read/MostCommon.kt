@@ -1,18 +1,6 @@
 package pixel.read
 
-import java.awt.image.BufferedImage
-
-class MostCommon {
-
-    enum class MostCommonFilter { Outer, Inner, All }
-
-    fun find(inputData: Array<IntArray>, filter: MostCommonFilter): Int {
-        return when (filter) {
-            MostCommonFilter.Outer -> getMostCommonOuterPixel(inputData)
-            MostCommonFilter.Inner -> getMostCommonInnerPixel(inputData)
-            MostCommonFilter.All -> getMostCommonPixel(inputData)
-        }
-    }
+object MostCommonOuter : ReadRule {
 
     private fun getMostCommonOuterPixel(inputData: Array<IntArray>): Int {
         FetchLog.d("Looking for most common outer pixel")
@@ -42,8 +30,12 @@ class MostCommon {
             pixelColours.merge(rightPixel, 1, Int::plus)
         }
 
-        return pixelColours.getTop()
+        return pixelColours.toList().maxByOrNull { it.second }!!.first
     }
+
+}
+
+object MostCommonInner : ReadRule {
 
     private fun getMostCommonInnerPixel(inputData: Array<IntArray>): Int {
         FetchLog.d("Looking for most common inner pixel")
@@ -57,8 +49,12 @@ class MostCommon {
             }
         }
 
-        return pixelColours.getTop()
+        return pixelColours.toList().maxByOrNull { it.second }!!.first
     }
+
+}
+
+object MostCommon : ReadRule {
 
     private fun getMostCommonPixel(inputData: Array<IntArray>): Int {
         FetchLog.d("Looking for most common pixel")
@@ -72,10 +68,7 @@ class MostCommon {
             }
         }
 
-        return pixelColours.getTop()
+        return pixelColours.toList().maxByOrNull { it.second }!!.first
     }
 
-    private fun MutableMap<Int, Int>.getTop(): Int {
-        return this.toList().maxByOrNull { it.second }!!.first
-    }
 }

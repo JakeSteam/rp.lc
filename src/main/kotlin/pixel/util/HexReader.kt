@@ -1,4 +1,4 @@
-package pixel.colour
+package pixel.util
 
 import java.awt.Color
 

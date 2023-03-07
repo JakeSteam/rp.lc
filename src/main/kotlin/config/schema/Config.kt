@@ -1,6 +1,6 @@
 package config.schema
 
-import pixel.read.ReadRule
+import pixel.analyser.Analyser
 import java.awt.Color
 
 data class Config(val meta: Meta, val tiles: List<Tile>) {
@@ -22,7 +22,7 @@ data class Config(val meta: Meta, val tiles: List<Tile>) {
     data class GenerationRule (
         val inputId: String,
         val outputId: String,
-        val readRule: ReadRule
+        val analyser: Analyser
     )
 }
 

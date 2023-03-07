@@ -1,7 +1,10 @@
 import image.ImageReader
 import image.ImageWriter
-import pixel.colour.HexReader
-import pixel.read.MostCommon
+import pixel.util.HexReader
+import pixel.analyser.MostCommonOuter
+import pixel.generator.Blank
+import pixel.placer.ApplyMask
+import pixel.transformer.ColourMatch
 
 fun main(args: Array<String>) {
     val inputData = ImageReader().loadImage()
@@ -9,28 +12,21 @@ fun main(args: Array<String>) {
         return
     }
 
-    val outputData = convertImage(inputData.bytes)
-
-    ImageWriter().save(outputData, inputData.filename)
-}
-
-fun convertImage(bytes: Array<IntArray>): Array<IntArray> {
-    val outerPixelColor = MostCommon.find(bytes, MostCommon.MostCommonFilter.Outer)
-
+    // Tile definitions
     val water = HexReader.toColor("#3383FF")!!.rgb
     val land = HexReader.toColor("#10A949")!!.rgb
 
-    val output = Array(bytes.size) { IntArray(bytes[0].size) }
+    // Take image as input, apply analyser `mostcommon`, get colour out
+    val outerPixel = MostCommonOuter.analyse(inputData.bytes)
 
-    // Need to apply all logic to pixel map here
-    // Then can write entire array to file
-    for (y in bytes.indices) {
-        for (x in bytes[0].indices) {
-            val pixel = bytes[y][x]
-            val colour = if (pixel == outerPixelColor) water else land
-            output[y][x] = colour
-        }
-    }
+    // Take image AND colour as input, apply transformer `colourmatches`, get boolean matrix out
+    val matchingPixels = ColourMatch.transform(inputData.bytes, outerPixel)
 
-    return output
+    // Take image metada as input, apply generator `blank`, get empty image out
+    val outputImage = Blank.create(inputData.bytes.size, inputData.bytes[0].size)
+
+    // Take true / false matrix AND true tile AND false tile as input, apply placer `setmatching`
+    val output = ApplyMask.place(outputImage, matchingPixels, water, land)
+
+    ImageWriter().save(output, inputData.filename)
 }

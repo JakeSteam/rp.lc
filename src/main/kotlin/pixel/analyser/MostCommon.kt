@@ -1,31 +1,33 @@
-package pixel.read
+package pixel.analyser
 
-object MostCommonOuter : ReadRule {
+import pixel.util.FetchLog
 
-    private fun getMostCommonOuterPixel(inputData: Array<IntArray>): Int {
+object MostCommonOuter : Analyser {
+
+    override fun analyse(data: Array<IntArray>): Int {
         FetchLog.d("Looking for most common outer pixel")
         val pixelColours: MutableMap<Int, Int> = HashMap()
-        val heightPixels = inputData.size - 1
-        val widthPixels = inputData[0].size - 1
+        val heightPixels = data.size - 1
+        val widthPixels = data[0].size - 1
 
         // Top & bottom row
         for (x in 0..widthPixels) {
-            val topPixel = inputData[0][x]
+            val topPixel = data[0][x]
             FetchLog.pixel(x, 0, topPixel)
             pixelColours.merge(topPixel, 1, Int::plus)
 
-            val bottomPixel = inputData[heightPixels][x]
+            val bottomPixel = data[heightPixels][x]
             FetchLog.pixel(x, heightPixels, bottomPixel)
             pixelColours.merge(bottomPixel, 1, Int::plus)
         }
 
         // Left & right column (excluding top & bottom pixels)
         for (y in 1 until heightPixels) {
-            val leftPixel = inputData[y][0]
+            val leftPixel = data[y][0]
             FetchLog.pixel(0, y, leftPixel)
             pixelColours.merge(leftPixel, 1, Int::plus)
 
-            val rightPixel = inputData[y][widthPixels]
+            val rightPixel = data[y][widthPixels]
             FetchLog.pixel(widthPixels, y, leftPixel)
             pixelColours.merge(rightPixel, 1, Int::plus)
         }
@@ -35,15 +37,15 @@ object MostCommonOuter : ReadRule {
 
 }
 
-object MostCommonInner : ReadRule {
+object MostCommonInner : Analyser {
 
-    private fun getMostCommonInnerPixel(inputData: Array<IntArray>): Int {
+    override fun analyse(data: Array<IntArray>): Int {
         FetchLog.d("Looking for most common inner pixel")
         val pixelColours: MutableMap<Int, Int> = HashMap()
 
-        for (y in 0 until inputData.size - 1) {
-            for (x in 0 until inputData[0].size - 1) {
-                val pixel = inputData[y][x]
+        for (y in 0 until data.size - 1) {
+            for (x in 0 until data[0].size - 1) {
+                val pixel = data[y][x]
                 FetchLog.pixel(x, y, pixel)
                 pixelColours.merge(pixel, 1, Int::plus)
             }
@@ -54,15 +56,15 @@ object MostCommonInner : ReadRule {
 
 }
 
-object MostCommon : ReadRule {
+object MostCommon : Analyser {
 
-    private fun getMostCommonPixel(inputData: Array<IntArray>): Int {
+    override fun analyse(data: Array<IntArray>): Int {
         FetchLog.d("Looking for most common pixel")
         val pixelColours: MutableMap<Int, Int> = HashMap()
 
-        for (y in inputData.indices) {
-            for (x in 0 until inputData[0].size) {
-                val pixel = inputData[y][x]
+        for (y in data.indices) {
+            for (x in 0 until data[0].size) {
+                val pixel = data[y][x]
                 FetchLog.pixel(x, y, pixel)
                 pixelColours.merge(pixel, 1, Int::plus)
             }

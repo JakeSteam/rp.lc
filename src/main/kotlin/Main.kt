@@ -5,6 +5,7 @@ import pixel.generator.Blank
 import pixel.placer.ApplyMask
 import pixel.transformer.ColourMatch
 import pixel.util.HexReader
+import kotlin.reflect.full.valueParameters
 
 fun main(args: Array<String>) {
     val inputData = ImageReader().loadImage()
@@ -51,8 +52,9 @@ fun main(args: Array<String>) {
         // Check input IDs are all output by someone
         //outputList.containsAll(generationRule.inputIds) // will fail due to input / dimens / tiles
 
-        // Lookup this rule's function, and what it needs
-        val inputParamsNeeded = generationRule.rule::class.members.first().typeParameters
+        // Lookup this rule's function, and get a list of what it needs
+        val inputParamsNeeded = generationRule.rule::class.members.first()
+            .valueParameters.map { it.type }
 
         // Lookup the data formats we have actually asked for
         val inputParamsFound = generationRule.inputIds.map { inputId ->

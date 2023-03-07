@@ -1,9 +1,10 @@
 package config.schema
 
+import pixel.Rule
 import pixel.analyser.Analyser
 import java.awt.Color
 
-data class Config(val meta: Meta, val tiles: List<Tile>, val rules: List) {
+data class Config(val meta: Meta, val tiles: List<Tile>, val rules: List<GenerationRule>) {
 
     data class Meta (
         val name: String,
@@ -19,8 +20,8 @@ data class Config(val meta: Meta, val tiles: List<Tile>, val rules: List) {
     )
 
     data class GenerationRule (
-        val inputId: String,
+        val rule: Rule,
         val outputId: String,
-        val analyser: Analyser
+        val inputIds: List<String>,
     )
 }

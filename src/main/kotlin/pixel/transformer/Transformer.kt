@@ -1,5 +1,7 @@
 package pixel.transformer
 
-sealed interface Transformer {
+import pixel.Rule
+
+sealed interface Transformer : Rule {
     fun transform(data: Array<IntArray>, parameter: Any): Array<BooleanArray>
 }

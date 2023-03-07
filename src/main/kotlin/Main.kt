@@ -2,6 +2,7 @@ import config.schema.Config
 import image.ImageReader
 import pixel.analyser.MostCommonOuter
 import pixel.generator.Blank
+import pixel.generator.Input
 import pixel.placer.ApplyMask
 import pixel.transformer.ColourMatch
 import pixel.util.HexReader
@@ -32,13 +33,16 @@ fun main(args: Array<String>) {
         ),
         rules = listOf(
             Config.GenerationRule(
+                Input, "input", emptyList()
+            ),
+            Config.GenerationRule(
                 MostCommonOuter, "outerPixel", listOf("input"),
             ),
             Config.GenerationRule(
                 ColourMatch, "matchingPixels", listOf("input", "outerPixel")
             ),
             Config.GenerationRule(
-                Blank, "outputImage", listOf("width", "height")
+                Blank, "outputImage", emptyList() // Hardcoded width & height!
             ),
             Config.GenerationRule(
                 ApplyMask, "output", listOf("outputImage", "matchingPixels", "Water", "Land")
@@ -47,22 +51,27 @@ fun main(args: Array<String>) {
     )
 
     // Validator
-    val outputList = testConfig.rules.map { it.outputId }
+    val allTiles = testConfig.tiles.map { it.name }
     testConfig.rules.forEach { generationRule ->
-        // Check input IDs are all output by someone
-        //outputList.containsAll(generationRule.inputIds) // will fail due to input / dimens / tiles
 
         // Lookup this rule's function, and get a list of what it needs
         val inputParamsNeeded = generationRule.rule::class.members.first()
-            .valueParameters.map { it.type }
+            .valueParameters.toMutableList()
 
         // Lookup the data formats we have actually asked for
         val inputParamsFound = generationRule.inputIds.map { inputId ->
-            val dependency = testConfig.rules.first { it.outputId == inputId }
-            dependency.rule::class.members.first().returnType
+            if (allTiles.contains(inputId)) {
+                Config.Tile::class
+            } else {
+                val dependency = testConfig.rules.first { it.outputId == inputId }
+                dependency.rule::class.members.first().returnType
+            }
         }
 
-        val isCorrect = inputParamsNeeded == inputParamsFound
+        val isCorrect = inputParamsNeeded.mapIndexed { index, param ->
+            param.type == inputParamsFound[index] || param.type == Any::class
+        }.all { true }
+        val aa = 1
     }
 
     /*

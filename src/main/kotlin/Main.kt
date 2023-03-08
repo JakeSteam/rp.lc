@@ -51,7 +51,12 @@ fun main(args: Array<String>) {
     )
 
     // Validator
-    // Next steps: Extract validator somewhere useful, begin working on actioner (that runs validator first)
+    // Next steps:
+    //  Extract validator somewhere useful
+    //  Begin working on actioner (that runs validator first)
+    //  Extract that
+    //  Parse JSON
+    //  Set up end to end proof of concept, update readme etc
     val allTiles = testConfig.tiles.map { it.name }
     testConfig.rules.forEach { generationRule ->
 

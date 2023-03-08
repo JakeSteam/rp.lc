@@ -5,6 +5,7 @@ import pixel.analyser.MostCommonOuter
 import pixel.generator.BlankImage
 import pixel.generator.InputImage
 import pixel.placer.ApplyMask
+import pixel.placer.OutputImage
 import pixel.transformer.ColourMatch
 import pixel.util.HexReader
 
@@ -42,10 +43,13 @@ fun main(args: Array<String>) {
                 ColourMatch, "matchingPixels", listOf("input", "outerPixelColour")
             ),
             Config.GenerationRule(
-                BlankImage, "outputImage", emptyList() // Hardcoded width & height!
+                BlankImage, "outputImage", listOf("input")
             ),
             Config.GenerationRule(
                 ApplyMask, "output", listOf("outputImage", "matchingPixels", "Water", "Land")
+            ),
+            Config.GenerationRule(
+                OutputImage, "finalOutput", listOf("output")
             )
         )
     )
@@ -65,9 +69,8 @@ fun main(args: Array<String>) {
     // Find "output image" node
     // Look up each input ID, find what outputs it
     // Some sort of caching / DB of these already found outputs
-    val finalNode = testConfig.rules.first { it.rule == ApplyMask }
+    val firstNode = testConfig.rules.first { it.rule == InputImage }
+    val firstNodeResult = (firstNode.rule as InputImage).create(emptyArray())
 
-    // Recursive bit
-    val finalNodeReqs = finalNode.inputIds
-    //(finalNode.rule as ApplyMask).place()
+    val nodesNeedingOutput = testConfig.rules.filter { it.inputIds.contains(firstNode.outputId) }
 }

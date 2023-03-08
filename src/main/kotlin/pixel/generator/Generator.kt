@@ -3,5 +3,5 @@ package pixel.generator
 import pixel.Rule
 
 sealed interface Generator : Rule {
-    fun create() : Array<IntArray>
+    fun create(input: Array<IntArray>) : Array<IntArray>
 }

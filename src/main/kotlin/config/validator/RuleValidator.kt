@@ -3,6 +3,8 @@ package config.validator
 import config.schema.Config
 import config.util.getInputParams
 import config.util.getReturnType
+import pixel.generator.InputImage
+import pixel.placer.OutputImage
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.isSubtypeOf
 
@@ -10,8 +12,9 @@ class RuleValidator {
 
     fun identifyConfigErrors(config: Config): String? {
         identifyMetaErrors(config.meta)?.let { return it }
-        identifyTileErrors(config.tiles)
-        identifyGenerationRuleFlowErrors(config.tiles, config.rules)
+        identifyTileErrors(config.tiles)?.let { return it }
+        identifyGenerationRuleFrequencyErrors(config.rules)?.let { return it }
+        identifyGenerationRuleFlowErrors(config.tiles, config.rules)?.let { return it }
         return null
     }
 
@@ -27,6 +30,12 @@ class RuleValidator {
             if (it.name.isEmpty()) { return "Tile name is empty" }
             if (it.description.isEmpty()) { return "Tile description is empty" }
         }
+        return null
+    }
+
+    private fun identifyGenerationRuleFrequencyErrors(rules: List<Config.GenerationRule>): String? {
+        rules.singleOrNull { it.rule == InputImage }?.let { return "More / less than one image input rule found" }
+        rules.singleOrNull { it.rule == OutputImage }?.let { return "More / less than one image output rule found" }
         return null
     }
 

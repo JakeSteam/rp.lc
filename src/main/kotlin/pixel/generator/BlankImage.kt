@@ -2,7 +2,7 @@ package pixel.generator
 
 object BlankImage : Generator {
 
-    override fun create() : Array<IntArray> {
-        return Array(97) { IntArray(73) }
+    override fun create(input: Array<IntArray>) : Array<IntArray> {
+        return Array(input.size) { IntArray(input[0].size) }
     }
 }

@@ -8,9 +8,9 @@ data class Config(val meta: Meta, val tiles: List<Tile>, val rules: List<Generat
 
     data class Meta (
         val name: String,
+        val engineVersion: String,
         val author: String,
-        val authorUrl: String,
-        val engineVersion: String
+        val authorUrl: String?
     )
 
     data class Tile (

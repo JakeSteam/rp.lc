@@ -1,4 +1,7 @@
 import config.schema.Config
+import config.util.getInputParams
+import config.util.getReturnType
+import config.validator.RuleValidator
 import image.ImageReader
 import pixel.analyser.MostCommonOuter
 import pixel.generator.Blank
@@ -56,27 +59,9 @@ fun main(args: Array<String>) {
     //  Begin working on actioner (that runs validator first)
     //  Extract that
     //  Parse JSON
-    //  Set up end to end proof of concept, update readme etc
-    val allTiles = testConfig.tiles.map { it.name }
-    testConfig.rules.forEach { generationRule ->
-
-        // Lookup this rule's function, and get a list of what it needs
-        val inputParamsNeeded = generationRule.rule::class.members.first()
-            .valueParameters.toMutableList()
-
-        // Lookup the data formats we have actually asked for in the config
-        val inputParamsFound = generationRule.inputIds.map { inputId ->
-            if (allTiles.contains(inputId)) {
-                Config.Tile::class
-            } else {
-                val dependency = testConfig.rules.first { it.outputId == inputId }
-                dependency.rule::class.members.first().returnType
-            }
-        }
-
-        val isCorrect = inputParamsNeeded.mapIndexed { index, param ->
-            param.type == inputParamsFound[index] || param.type == Any::class
-        }.all { true }
+    //  Set up end to end proof of concept, update readme, sort logging etc
+    RuleValidator().identifyConfigErrors(testConfig)?.let {
+        print("Uh oh: $it")
     }
 
     /*

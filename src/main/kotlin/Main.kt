@@ -57,8 +57,8 @@ fun main(args: Array<String>) {
     // Validator
     // Next steps:
     //  x Extract validator somewhere useful
-    //  Begin working on actioner (that runs validator first)
-    //  Extract that
+    //  x Begin working on actioner (that runs validator first)
+    //  Extract that (fix filename hardcoding)
     //  Parse JSON
     //  Set up end to end proof of concept, update readme, sort logging etc
     RuleValidator().identifyConfigErrors(testConfig)?.let {

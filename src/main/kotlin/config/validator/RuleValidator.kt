@@ -11,7 +11,7 @@ class RuleValidator {
     fun identifyConfigErrors(config: Config): String? {
         identifyMetaErrors(config.meta)?.let { return it }
         identifyTileErrors(config.tiles)
-        identifyGenerationRuleErrors(config.tiles, config.rules)
+        identifyGenerationRuleFlowErrors(config.tiles, config.rules)
         return null
     }
 
@@ -30,9 +30,12 @@ class RuleValidator {
         return null
     }
 
-    private fun identifyGenerationRuleErrors(tiles: List<Config.Tile>, rules: List<Config.GenerationRule>): String? {
+    private fun identifyGenerationRuleFlowErrors(tiles: List<Config.Tile>, rules: List<Config.GenerationRule>): String? {
         val allTiles = tiles.map { it.name }
+        val allInputs = rules.flatMap { it.inputIds }
+
         rules.forEach { generationRule ->
+            // Check all inputs are provided
             val inputParamsNeeded = generationRule.rule.getInputParams()
             val inputParamsProvided = generationRule.inputIds.map { inputId ->
                 if (allTiles.contains(inputId)) {
@@ -48,7 +51,11 @@ class RuleValidator {
                     return "${needed.name} required ${needed.type}, but received $provided"
                 }
             }
+
+            // Check output is utilised
+            allInputs.contains(generationRule.outputId)
         }
+
         return null
     }
 }

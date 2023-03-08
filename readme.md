@@ -8,10 +8,11 @@ For example, there could be a "Anthill" recipe that defines the rules for an ant
 
 ## What can it do currently?
 
-Nothing much. It can load an image from `/input/` and perform very basic logic on it:
-1. Fetch the edge pixels of the image.
-2. Work out the most common colour.
-3. Replace all those pixels with "water", and all others with "land".›
+It can load an image from `/input/` and perform a set of rules on it. These rules identify the most common border pixel, colour all matching pixels blue, and all other pixels green.
+
+These rules are currently hardcoded in `Main.kt`, this is their logic flow:
+
+![](/docs/exampleFlow.png)
 
 ## How can I use it?
 

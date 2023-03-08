@@ -1,15 +1,12 @@
 import config.schema.Config
-import config.util.getInputParams
-import config.util.getReturnType
 import config.validator.RuleValidator
 import image.ImageReader
 import pixel.analyser.MostCommonOuter
-import pixel.generator.Blank
-import pixel.generator.Input
+import pixel.generator.BlankImage
+import pixel.generator.InputImage
 import pixel.placer.ApplyMask
 import pixel.transformer.ColourMatch
 import pixel.util.HexReader
-import kotlin.reflect.full.valueParameters
 
 fun main(args: Array<String>) {
     val inputData = ImageReader().loadImage()
@@ -36,16 +33,16 @@ fun main(args: Array<String>) {
         ),
         rules = listOf(
             Config.GenerationRule(
-                Input, "input", emptyList()
+                InputImage, "input", emptyList()
             ),
             Config.GenerationRule(
-                MostCommonOuter, "outerPixel", listOf("input"),
+                MostCommonOuter, "outerPixelColour", listOf("input"),
             ),
             Config.GenerationRule(
-                ColourMatch, "matchingPixels", listOf("input", "outerPixel")
+                ColourMatch, "matchingPixels", listOf("input", "outerPixelColour")
             ),
             Config.GenerationRule(
-                Blank, "outputImage", emptyList() // Hardcoded width & height!
+                BlankImage, "outputImage", emptyList() // Hardcoded width & height!
             ),
             Config.GenerationRule(
                 ApplyMask, "output", listOf("outputImage", "matchingPixels", "Water", "Land")
@@ -63,24 +60,4 @@ fun main(args: Array<String>) {
     RuleValidator().identifyConfigErrors(testConfig)?.let {
         print("Uh oh: $it")
     }
-
-    /*
-    // Tile definitions
-    val water = HexReader.toColor("#3383FF")!!.rgb
-    val land = HexReader.toColor("#10A949")!!.rgb
-
-    // Take image as input, apply analyser `mostcommon`, get colour out
-    val outerPixel = MostCommonOuter.analyse(inputData.bytes)
-
-    // Take image AND colour as input, apply transformer `colourmatches`, get boolean matrix out
-    val matchingPixels = ColourMatch.transform(inputData.bytes, outerPixel)
-
-    // Take image metadata as input, apply generator `blank`, get empty image out
-    val outputImage = Blank.create(inputData.bytes.size, inputData.bytes[0].size)
-
-    // Take true / false matrix AND true tile AND false tile as input, apply placer `setmatching`
-    val output = ApplyMask.place(outputImage, matchingPixels, water, land)
-
-    ImageWriter().save(output, inputData.filename)
-     */
 }

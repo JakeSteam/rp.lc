@@ -1,4 +1,4 @@
-package pixel.util
+package generation.util
 
 class FetchLog {
     companion object {

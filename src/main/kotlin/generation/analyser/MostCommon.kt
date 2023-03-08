@@ -1,6 +1,6 @@
-package pixel.analyser
+package generation.analyser
 
-import pixel.util.FetchLog
+import generation.util.FetchLog
 
 object MostCommonOuter : Analyser {
 

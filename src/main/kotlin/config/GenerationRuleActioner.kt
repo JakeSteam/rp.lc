@@ -1,10 +1,9 @@
-package config.actioner
+package config
 
-import config.schema.Config
-import pixel.generator.InputImage
-import pixel.placer.OutputImage
+import generation.creator.InputImage
+import generation.placer.OutputImage
 
-class RuleActioner {
+class GenerationRuleActioner {
 
     fun performGenerationRules(rules: List<Config.GenerationRule>, tiles: List<Config.Tile>) {
         // Setup

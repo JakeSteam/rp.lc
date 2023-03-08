@@ -1,0 +1,3 @@
+package generation
+
+interface BaseRule

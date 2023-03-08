@@ -1,13 +1,13 @@
-import config.actioner.RuleActioner
-import config.schema.Config
-import config.validator.RuleValidator
+import config.GenerationRuleActioner
+import config.Config
+import config.RuleValidator
 import image.ImageReader
-import pixel.analyser.MostCommonOuter
-import pixel.generator.BlankImage
-import pixel.generator.InputImage
-import pixel.placer.ApplyMask
-import pixel.placer.OutputImage
-import pixel.transformer.ColourMatch
+import generation.analyser.MostCommonOuter
+import generation.creator.BlankImage
+import generation.creator.InputImage
+import generation.placer.ApplyMask
+import generation.placer.OutputImage
+import generation.transformer.ColourMatch
 import util.HexReader
 
 fun main(args: Array<String>) {
@@ -62,5 +62,5 @@ fun main(args: Array<String>) {
         return
     }
 
-    RuleActioner().performGenerationRules(testConfig.rules, testConfig.tiles)
+    GenerationRuleActioner().performGenerationRules(testConfig.rules, testConfig.tiles)
 }

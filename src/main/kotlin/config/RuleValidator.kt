@@ -1,10 +1,9 @@
-package config.validator
+package config
 
-import config.schema.Config
 import util.getInputParams
 import util.getReturnType
-import pixel.generator.InputImage
-import pixel.placer.OutputImage
+import generation.creator.InputImage
+import generation.placer.OutputImage
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.isSubtypeOf
 

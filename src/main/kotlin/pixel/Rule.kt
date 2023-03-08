@@ -1,3 +1,0 @@
-package pixel
-
-interface Rule

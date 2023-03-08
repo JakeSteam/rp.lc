@@ -1,4 +1,4 @@
-package pixel.transformer
+package generation.transformer
 
 object ColourMatch : Transformer {
     override fun invoke(data: Array<IntArray>, parameter: Any): Array<BooleanArray> {

@@ -1,6 +1,6 @@
-package pixel.placer
+package generation.placer
 
-import config.schema.Config
+import config.Config
 import image.ImageWriter
 
 object OutputImage : Placer {

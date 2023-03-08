@@ -1,6 +1,6 @@
-package pixel.placer
+package generation.placer
 
-import config.schema.Config
+import config.Config
 
 object ApplyMask : Placer {
     override fun invoke(image: Array<IntArray>, mask: Array<BooleanArray>, ifTrue: Config.Tile, ifFalse: Config.Tile): Array<IntArray> {

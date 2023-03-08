@@ -1,9 +1,9 @@
-package pixel.placer
+package generation.placer
 
-import config.schema.Config
-import pixel.Rule
+import config.Config
+import generation.BaseRule
 
-sealed interface Placer : Rule {
+sealed interface Placer : BaseRule {
 
     fun invoke(image: Array<IntArray>, mask: Array<BooleanArray>, ifTrue: Config.Tile, ifFalse: Config.Tile): Array<IntArray>
 }

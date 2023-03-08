@@ -66,11 +66,27 @@ fun main(args: Array<String>) {
     }
 
     // Actioner
-    // Find "output image" node
-    // Look up each input ID, find what outputs it
-    // Some sort of caching / DB of these already found outputs
-    val firstNode = testConfig.rules.first { it.rule == InputImage }
-    val firstNodeResult = (firstNode.rule as InputImage).create(emptyArray())
+    val outputNode = testConfig.rules.first { it.rule == OutputImage}
+    val solvedNodes = hashMapOf<String, Any>()
 
-    val nodesNeedingOutput = testConfig.rules.filter { it.inputIds.contains(firstNode.outputId) }
+    // Whilst we haven't solved the final node, keep trying
+    while (!solvedNodes.contains(outputNode.outputId)) {
+        // Get all the nodes that haven't been solved yet
+        val targetNodes = testConfig.rules.filter { !solvedNodes.containsKey(it.outputId) }
+        targetNodes.forEach { generationRule ->
+            // For each one, if all needed inputs have been obtained, invoke it
+            if (solvedNodes.keys.containsAll(generationRule.inputIds)) {
+                // Pull the outputs we need
+                val relevantSolvedNodes = solvedNodes.filterKeys { generationRule.inputIds.contains(it) }
+
+                // Invoke function with the retrieved outputs
+                val nodeOutput = generationRule.rule::class.members.find { it.name == "invoke" }!!.call(
+                    *relevantSolvedNodes.values.toTypedArray()
+                )
+
+                // Add the result into solved nodes, for future use
+                solvedNodes[generationRule.outputId] = nodeOutput
+            }
+        }
+    }
 }

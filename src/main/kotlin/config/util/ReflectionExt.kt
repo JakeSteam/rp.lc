@@ -3,6 +3,6 @@ package config.util
 import pixel.Rule
 import kotlin.reflect.full.valueParameters
 
-fun Rule.getInputParams() = this::class.members.first().valueParameters
+fun Rule.getInputParams() = this::class.members.find { it.name == "invoke" }!!.valueParameters
 
-fun Rule.getReturnType() = this::class.members.first().returnType
+fun Rule.getReturnType() = this::class.members.find { it.name == "invoke"}!!.returnType

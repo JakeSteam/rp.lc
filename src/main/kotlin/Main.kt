@@ -51,6 +51,7 @@ fun main(args: Array<String>) {
     )
 
     // Validator
+    // Next steps: Extract validator somewhere useful, begin working on actioner (that runs validator first)
     val allTiles = testConfig.tiles.map { it.name }
     testConfig.rules.forEach { generationRule ->
 
@@ -58,7 +59,7 @@ fun main(args: Array<String>) {
         val inputParamsNeeded = generationRule.rule::class.members.first()
             .valueParameters.toMutableList()
 
-        // Lookup the data formats we have actually asked for
+        // Lookup the data formats we have actually asked for in the config
         val inputParamsFound = generationRule.inputIds.map { inputId ->
             if (allTiles.contains(inputId)) {
                 Config.Tile::class
@@ -71,7 +72,6 @@ fun main(args: Array<String>) {
         val isCorrect = inputParamsNeeded.mapIndexed { index, param ->
             param.type == inputParamsFound[index] || param.type == Any::class
         }.all { true }
-        val aa = 1
     }
 
     /*

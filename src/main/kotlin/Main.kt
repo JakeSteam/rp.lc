@@ -52,7 +52,7 @@ fun main(args: Array<String>) {
 
     // Validator
     // Next steps:
-    //  Extract validator somewhere useful
+    //  x Extract validator somewhere useful
     //  Begin working on actioner (that runs validator first)
     //  Extract that
     //  Parse JSON
@@ -60,4 +60,14 @@ fun main(args: Array<String>) {
     RuleValidator().identifyConfigErrors(testConfig)?.let {
         print("Uh oh: $it")
     }
+
+    // Actioner
+    // Find "output image" node
+    // Look up each input ID, find what outputs it
+    // Some sort of caching / DB of these already found outputs
+    val finalNode = testConfig.rules.first { it.rule == ApplyMask }
+
+    // Recursive bit
+    val finalNodeReqs = finalNode.inputIds
+    //(finalNode.rule as ApplyMask).place()
 }

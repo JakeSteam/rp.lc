@@ -65,6 +65,8 @@ class RuleValidator {
 
             // Check output is utilised
             allInputs.contains(generationRule.outputId)
+
+            // Check no infinite loops
         }
 
         return null

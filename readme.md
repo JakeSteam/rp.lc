@@ -4,13 +4,13 @@
 
 PixelMetre is a (very unfinished) engine & ecosystem for creating simulations that act based on input images.
 
-For example, there could be a "Anthill" recipe that defines the rules for an ant colony and the life within. An image would then provide the "seed" for this colony, which would be converted by the sim rules into a full simulation.
+For example, there could be an "Anthill" recipe that defines the rules for an ant colony and the life within. An image would then provide the "seed" for this colony, which would be converted by the sim rules into a full simulation.
 
 ## What can it do currently?
 
 It can load an image from `/input/` and perform a set of rules on it. These rules identify the most common border pixel, colour all matching pixels blue, and all other pixels green.
 
-These rules are currently hardcoded in `Main.kt`, this is their logic flow:
+These rules are currently hardcoded in `Main.kt` (soon to be in JSON), this is their logic flow:
 
 ![](/docs/exampleFlow.png)
 
@@ -26,9 +26,3 @@ Run `Main.kt` with an image file in `/input/`.
 ## How can I help?
 
 * Let me know what you think of the planned features / roadmap.
-
-## What are key terms for the project?
-
-* Simrecipe: The config file that defines how a simulation should run.
-* Resources / Tile / Structure / Life: The entities defined in a simrecipe.
-* Step: 1 "turn" in the sim, where all life will act according to their rules.

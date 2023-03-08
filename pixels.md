@@ -35,5 +35,3 @@
 
 #### Ant
 
-## Image saving
-

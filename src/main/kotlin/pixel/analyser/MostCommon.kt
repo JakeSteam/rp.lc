@@ -4,7 +4,7 @@ import pixel.util.FetchLog
 
 object MostCommonOuter : Analyser {
 
-    override fun analyse(data: Array<IntArray>): Int {
+    override fun invoke(data: Array<IntArray>): Int {
         FetchLog.d("Looking for most common outer pixel")
         val pixelColours: MutableMap<Int, Int> = HashMap()
         val heightPixels = data.size - 1
@@ -39,7 +39,7 @@ object MostCommonOuter : Analyser {
 
 object MostCommonInner : Analyser {
 
-    override fun analyse(data: Array<IntArray>): Int {
+    override fun invoke(data: Array<IntArray>): Int {
         FetchLog.d("Looking for most common inner pixel")
         val pixelColours: MutableMap<Int, Int> = HashMap()
 
@@ -58,7 +58,7 @@ object MostCommonInner : Analyser {
 
 object MostCommon : Analyser {
 
-    override fun analyse(data: Array<IntArray>): Int {
+    override fun invoke(data: Array<IntArray>): Int {
         FetchLog.d("Looking for most common pixel")
         val pixelColours: MutableMap<Int, Int> = HashMap()
 

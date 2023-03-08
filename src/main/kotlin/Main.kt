@@ -62,12 +62,22 @@ fun main(args: Array<String>) {
     //  Parse JSON
     //  Set up end to end proof of concept, update readme, sort logging etc
     RuleValidator().identifyConfigErrors(testConfig)?.let {
-        print("Uh oh: $it")
+        println("Uh oh: $it")
+        return
     }
 
     // Actioner
-    val outputNode = testConfig.rules.first { it.rule == OutputImage}
+
+    // Setup
+    val inputNode = testConfig.rules.first { it.rule == InputImage }
+    val outputNode = testConfig.rules.first { it.rule == OutputImage }
     val solvedNodes = hashMapOf<String, Any>()
+
+    // Add all tiles / precalced
+    testConfig.tiles.forEach {
+        solvedNodes[it.name] = it
+    }
+    solvedNodes[inputNode.outputId] = InputImage.invoke(emptyArray())
 
     // Whilst we haven't solved the final node, keep trying
     while (!solvedNodes.contains(outputNode.outputId)) {
@@ -80,12 +90,15 @@ fun main(args: Array<String>) {
                 val relevantSolvedNodes = solvedNodes.filterKeys { generationRule.inputIds.contains(it) }
 
                 // Invoke function with the retrieved outputs
+                println("About to call ${generationRule.outputId}, we have ${relevantSolvedNodes.size} inputs")
+                val instance = generationRule.rule::class.objectInstance
                 val nodeOutput = generationRule.rule::class.members.find { it.name == "invoke" }!!.call(
+                    instance,
                     *relevantSolvedNodes.values.toTypedArray()
                 )
 
                 // Add the result into solved nodes, for future use
-                solvedNodes[generationRule.outputId] = nodeOutput
+                solvedNodes[generationRule.outputId] = nodeOutput!!
             }
         }
     }

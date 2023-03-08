@@ -34,8 +34,8 @@ class RuleValidator {
     }
 
     private fun identifyGenerationRuleFrequencyErrors(rules: List<Config.GenerationRule>): String? {
-        rules.singleOrNull { it.rule == InputImage }?.let { return "More / less than one image input rule found" }
-        rules.singleOrNull { it.rule == OutputImage }?.let { return "More / less than one image output rule found" }
+        rules.singleOrNull { it.rule == InputImage } ?: return "More / less than one image input rule found"
+        rules.singleOrNull { it.rule == OutputImage } ?: return "More / less than one image output rule found"
         return null
     }
 
@@ -44,6 +44,9 @@ class RuleValidator {
         val allInputs = rules.flatMap { it.inputIds }
 
         rules.forEach { generationRule ->
+            if (generationRule.rule == InputImage) return@forEach
+            if (generationRule.rule == OutputImage) return@forEach // No! Need to check inputs!
+
             // Check all inputs are provided
             val inputParamsNeeded = generationRule.rule.getInputParams()
             val inputParamsProvided = generationRule.inputIds.map { inputId ->

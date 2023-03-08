@@ -1,8 +1,8 @@
 package config.validator
 
 import config.schema.Config
-import config.util.getInputParams
-import config.util.getReturnType
+import util.getInputParams
+import util.getReturnType
 import pixel.generator.InputImage
 import pixel.placer.OutputImage
 import kotlin.reflect.full.createType

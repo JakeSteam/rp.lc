@@ -1,4 +1,4 @@
-package config.util
+package util
 
 import pixel.Rule
 import kotlin.reflect.full.valueParameters

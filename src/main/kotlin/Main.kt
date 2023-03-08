@@ -1,3 +1,4 @@
+import config.actioner.RuleActioner
 import config.schema.Config
 import config.validator.RuleValidator
 import image.ImageReader
@@ -7,18 +8,13 @@ import pixel.generator.InputImage
 import pixel.placer.ApplyMask
 import pixel.placer.OutputImage
 import pixel.transformer.ColourMatch
-import pixel.util.HexReader
+import util.HexReader
 
 fun main(args: Array<String>) {
     val inputData = ImageReader().loadImage()
     if (inputData == null || inputData.bytes.size < 10 || inputData.bytes[1].size < 10) {
         return
     }
-
-    // Special vars
-    val input = inputData.bytes
-    val width = inputData.bytes[0].size
-    val height = inputData.bytes.size
 
     // Converted into object
     val testConfig = Config(
@@ -66,49 +62,5 @@ fun main(args: Array<String>) {
         return
     }
 
-    // Actioner
-
-    // Setup
-    val inputNode = testConfig.rules.first { it.rule == InputImage }
-    val outputNode = testConfig.rules.first { it.rule == OutputImage }
-    val dummyTile = Config.Tile("", "", 0)
-    val solvedNodes = hashMapOf<String, Any>()
-
-    // Add all tiles / precalced
-    testConfig.tiles.forEach {
-        solvedNodes[it.name] = it
-    }
-    solvedNodes[inputNode.outputId] = InputImage.invoke(emptyArray())
-
-    // Whilst we haven't solved the final node, keep trying
-    while (!solvedNodes.contains(outputNode.outputId)) {
-        // Get all the nodes that haven't been solved yet
-        val targetNodes = testConfig.rules.filter { !solvedNodes.containsKey(it.outputId) }
-        targetNodes.forEach { generationRule ->
-            // For each one, if all needed inputs have been obtained, invoke it
-            if (solvedNodes.keys.containsAll(generationRule.inputIds)) {
-                // Pull the outputs we need
-                val relevantSolvedNodes = solvedNodes
-                    .filterKeys { generationRule.inputIds.contains(it) }
-                    .toSortedMap(compareBy {
-                        generationRule.inputIds.indexOf(it)
-                    })
-
-
-                // Invoke function with the retrieved outputs
-                println("About to call ${generationRule.outputId} (${generationRule.rule}), we have ${relevantSolvedNodes.size} inputs")
-                val instance = generationRule.rule::class.objectInstance
-                val nodeOutput = if (generationRule.rule == OutputImage) {
-                    OutputImage.invoke(relevantSolvedNodes.values.first() as Array<IntArray>, emptyArray(), dummyTile, dummyTile)
-                } else {
-                    generationRule.rule::class.members.find { it.name == "invoke" }!!.call(
-                        instance,
-                        *relevantSolvedNodes.values.toTypedArray()
-                    )
-                }
-                // Add the result into solved nodes, for future use
-                solvedNodes[generationRule.outputId] = nodeOutput!!
-            }
-        }
-    }
+    RuleActioner().performGenerationRules(testConfig.rules, testConfig.tiles)
 }

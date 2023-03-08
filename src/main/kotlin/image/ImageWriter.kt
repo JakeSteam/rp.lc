@@ -10,6 +10,7 @@ class ImageWriter {
 
     fun save(bytes: Array<IntArray>, filename: String): Boolean {
         val output = getOutputPath(filename)
+        output.mkdirs()
 
         val image = BufferedImage(bytes[0].size, bytes.size, BufferedImage.TYPE_INT_ARGB)
         for (y in bytes.indices) {

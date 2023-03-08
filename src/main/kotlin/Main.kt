@@ -34,22 +34,22 @@ fun main(args: Array<String>) {
         ),
         rules = listOf(
             Config.GenerationRule(
-                InputImage, "input", emptyList()
+                InputImage, "input", arrayListOf()
             ),
             Config.GenerationRule(
-                MostCommonOuter, "outerPixelColour", listOf("input"),
+                MostCommonOuter, "outerPixelColour", arrayListOf("input"),
             ),
             Config.GenerationRule(
-                ColourMatch, "matchingPixels", listOf("input", "outerPixelColour")
+                ColourMatch, "matchingPixels", arrayListOf("input", "outerPixelColour")
             ),
             Config.GenerationRule(
-                BlankImage, "outputImage", listOf("input")
+                BlankImage, "outputImage", arrayListOf("input")
             ),
             Config.GenerationRule(
-                ApplyMask, "output", listOf("outputImage", "matchingPixels", "Water", "Land")
+                ApplyMask, "output", arrayListOf("outputImage", "matchingPixels", "Water", "Land")
             ),
             Config.GenerationRule(
-                OutputImage, "finalOutput", listOf("output")
+                OutputImage, "finalOutput", arrayListOf("output")
             )
         )
     )
@@ -71,6 +71,7 @@ fun main(args: Array<String>) {
     // Setup
     val inputNode = testConfig.rules.first { it.rule == InputImage }
     val outputNode = testConfig.rules.first { it.rule == OutputImage }
+    val dummyTile = Config.Tile("", "", 0)
     val solvedNodes = hashMapOf<String, Any>()
 
     // Add all tiles / precalced
@@ -87,16 +88,24 @@ fun main(args: Array<String>) {
             // For each one, if all needed inputs have been obtained, invoke it
             if (solvedNodes.keys.containsAll(generationRule.inputIds)) {
                 // Pull the outputs we need
-                val relevantSolvedNodes = solvedNodes.filterKeys { generationRule.inputIds.contains(it) }
+                val relevantSolvedNodes = solvedNodes
+                    .filterKeys { generationRule.inputIds.contains(it) }
+                    .toSortedMap(compareBy {
+                        generationRule.inputIds.indexOf(it)
+                    })
+
 
                 // Invoke function with the retrieved outputs
-                println("About to call ${generationRule.outputId}, we have ${relevantSolvedNodes.size} inputs")
+                println("About to call ${generationRule.outputId} (${generationRule.rule}), we have ${relevantSolvedNodes.size} inputs")
                 val instance = generationRule.rule::class.objectInstance
-                val nodeOutput = generationRule.rule::class.members.find { it.name == "invoke" }!!.call(
-                    instance,
-                    *relevantSolvedNodes.values.toTypedArray()
-                )
-
+                val nodeOutput = if (generationRule.rule == OutputImage) {
+                    OutputImage.invoke(relevantSolvedNodes.values.first() as Array<IntArray>, emptyArray(), dummyTile, dummyTile)
+                } else {
+                    generationRule.rule::class.members.find { it.name == "invoke" }!!.call(
+                        instance,
+                        *relevantSolvedNodes.values.toTypedArray()
+                    )
+                }
                 // Add the result into solved nodes, for future use
                 solvedNodes[generationRule.outputId] = nodeOutput!!
             }

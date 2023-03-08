@@ -22,6 +22,6 @@ data class Config(val meta: Meta, val tiles: List<Tile>, val rules: List<Generat
     data class GenerationRule (
         val rule: Rule,
         val outputId: String,
-        val inputIds: List<String>,
+        val inputIds: ArrayList<String>,
     )
 }

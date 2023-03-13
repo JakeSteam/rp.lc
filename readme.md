@@ -10,9 +10,7 @@ For example, there could be an "Anthill" recipe that defines the rules for an an
 
 It can load an image from `/input/` and perform a set of JSON-derived rules on it. These rules identify the most common border pixel, colour all matching pixels blue, and all other pixels green.
 
-These rules are currently hardcoded in `Main.kt` (soon to be in JSON), this is their logic flow:
-
-![](/docs/exampleFlow.png)
+These rules are currently hardcoded in `Main.kt` (soon to be in JSON), [this is the logic flow](/docs/exampleFlow.png).
 
 ## How can I use it?
 
@@ -21,7 +19,17 @@ Run `Main.kt` with an image file in `/input/`.
 ## What is the roadmap?
 
 * [todo.md](todo.md) is the constantly updated plan for the project, with far more ideas than can ever be implemented!
-* [pixels.md](pixels.md) is a definition of the rules included in the default sim ruleset.
+* [pixels.md](pixels.md) is a definition of the rules intended to be included in the default sim ruleset.
+
+## What's the end goal?
+
+Eventually this project will ideally end up as a collection of projects:
+
+* `PixelMetre Recipe Creator`: A drag & drop recipe creator.
+* `PixelMetre Recipe Store`: A listing of recipes, their metadata, samples, etc.
+* `PixelMetre Engine`: **This repo**, a tool that uses recipes to convert input images into simulations.
+
+The projects will have shared modules / functionality, e.g. JSON / rule parsing & validation
 
 ## How can I help?
 

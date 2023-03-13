@@ -52,7 +52,8 @@ class RuleValidator {
                 if (allTiles.contains(inputId)) {
                     Config.Tile::class.createType()
                 } else {
-                    rules.first { it.outputId == inputId }.rule.getReturnType()
+                    rules.firstOrNull { it.outputId == inputId }?.rule?.getReturnType()
+                        ?: return "No value provided for $inputId, needed by ${generationRule.outputId}"
                 }
             }
             inputParamsNeeded.forEachIndexed { index, needed ->

@@ -2,6 +2,9 @@ import config.GenerationRuleActioner
 import config.Config
 import config.RuleValidator
 import image.ImageReader
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonBuilder
 import rules.analyser.MostCommonOuter
 import rules.creator.BlankImage
 import rules.creator.InputImage
@@ -49,6 +52,9 @@ fun main(args: Array<String>) {
             )
         )
     )
+
+    val json = JsonBuilder.
+    val b = 5
 
     // Validator
     // Next steps:

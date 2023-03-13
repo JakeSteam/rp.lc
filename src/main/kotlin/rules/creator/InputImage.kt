@@ -1,6 +1,7 @@
 package rules.creator
 
 import image.ImageReader
+import kotlinx.serialization.Serializable
 
 object InputImage : Creator {
 

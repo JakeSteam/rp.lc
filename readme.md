@@ -8,7 +8,7 @@ For example, there could be an "Anthill" recipe that defines the rules for an an
 
 ## What can it do currently?
 
-It can load an image from `/input/` and perform a set of rules on it. These rules identify the most common border pixel, colour all matching pixels blue, and all other pixels green.
+It can load an image from `/input/` and perform a set of JSON-derived rules on it. These rules identify the most common border pixel, colour all matching pixels blue, and all other pixels green.
 
 These rules are currently hardcoded in `Main.kt` (soon to be in JSON), this is their logic flow:
 

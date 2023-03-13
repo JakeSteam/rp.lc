@@ -2,12 +2,12 @@ import config.GenerationRuleActioner
 import config.Config
 import config.RuleValidator
 import image.ImageReader
-import generation.analyser.MostCommonOuter
-import generation.creator.BlankImage
-import generation.creator.InputImage
-import generation.placer.ApplyMask
-import generation.placer.OutputImage
-import generation.transformer.ColourMatch
+import rules.analyser.MostCommonOuter
+import rules.creator.BlankImage
+import rules.creator.InputImage
+import rules.placer.ApplyMask
+import rules.placer.OutputImage
+import rules.transformer.ColourMatch
 import util.HexReader
 
 fun main(args: Array<String>) {

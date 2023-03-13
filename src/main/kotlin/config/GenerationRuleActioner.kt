@@ -1,7 +1,7 @@
 package config
 
-import generation.creator.InputImage
-import generation.placer.OutputImage
+import rules.creator.InputImage
+import rules.placer.OutputImage
 
 class GenerationRuleActioner {
 

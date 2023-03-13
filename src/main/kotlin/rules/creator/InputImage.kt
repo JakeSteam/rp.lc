@@ -1,4 +1,4 @@
-package generation.creator
+package rules.creator
 
 import image.ImageReader
 

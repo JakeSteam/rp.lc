@@ -1,6 +1,6 @@
-package generation.analyser
+package rules.analyser
 
-import generation.util.FetchLog
+import util.FetchLog
 
 object MostCommonOuter : Analyser {
 

@@ -1,3 +1,3 @@
-package generation
+package rules
 
 interface BaseRule

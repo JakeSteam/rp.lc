@@ -1,6 +1,6 @@
-package generation.transformer
+package rules.transformer
 
-import generation.BaseRule
+import rules.BaseRule
 
 sealed interface Transformer : BaseRule {
     fun invoke(data: Array<IntArray>, parameter: Any): Array<BooleanArray>

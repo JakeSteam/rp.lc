@@ -1,4 +1,4 @@
-package generation.transformer
+package rules.transformer
 
 object ColourMatch : Transformer {
     override fun invoke(data: Array<IntArray>, parameter: Any): Array<BooleanArray> {

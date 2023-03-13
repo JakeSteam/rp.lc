@@ -1,7 +1,7 @@
-package generation.placer
+package rules.placer
 
 import config.Config
-import generation.BaseRule
+import rules.BaseRule
 
 sealed interface Placer : BaseRule {
 

@@ -1,6 +1,6 @@
 package util
 
-import generation.BaseRule
+import rules.BaseRule
 import kotlin.reflect.full.valueParameters
 
 fun BaseRule.getInputParams() = this::class.members.find { it.name == "invoke" }!!.valueParameters

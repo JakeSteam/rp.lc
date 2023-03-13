@@ -1,4 +1,4 @@
-package generation.util
+package util
 
 class FetchLog {
     companion object {

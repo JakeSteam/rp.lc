@@ -16,7 +16,7 @@ data class Config(val meta: Meta, val tiles: List<Tile>, val rules: List<Generat
     )
 
     data class GenerationRule (
-        val rule: generation.BaseRule,
+        val rule: rules.BaseRule,
         val outputId: String,
         val inputIds: ArrayList<String>,
     )

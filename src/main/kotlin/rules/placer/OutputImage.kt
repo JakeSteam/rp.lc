@@ -1,4 +1,4 @@
-package generation.placer
+package rules.placer
 
 import config.Config
 import image.ImageWriter

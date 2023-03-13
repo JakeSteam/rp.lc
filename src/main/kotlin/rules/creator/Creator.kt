@@ -1,6 +1,6 @@
-package generation.creator
+package rules.creator
 
-import generation.BaseRule
+import rules.BaseRule
 
 sealed interface Creator : BaseRule {
     fun invoke(input: Array<IntArray>) : Array<IntArray>

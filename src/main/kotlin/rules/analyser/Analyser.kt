@@ -1,6 +1,6 @@
-package generation.analyser
+package rules.analyser
 
-import generation.BaseRule
+import rules.BaseRule
 
 sealed interface Analyser : BaseRule {
     fun invoke(data: Array<IntArray>): Int

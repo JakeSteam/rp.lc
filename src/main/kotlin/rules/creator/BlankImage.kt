@@ -1,4 +1,4 @@
-package generation.creator
+package rules.creator
 
 object BlankImage : Creator {
 

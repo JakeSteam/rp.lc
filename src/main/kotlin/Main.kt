@@ -6,6 +6,12 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import rules.*
+import rules.analyser.MostCommonOuter
+import rules.creator.BlankImage
+import rules.creator.InputImage
+import rules.placer.ApplyMask
+import rules.placer.OutputImage
+import rules.transformer.ColourMatch
 import util.HexReader
 
 fun main(args: Array<String>) {

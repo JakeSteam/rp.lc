@@ -1,4 +1,4 @@
-package rules
+package rules.placer
 
 import config.Config
 import kotlinx.serialization.Serializable

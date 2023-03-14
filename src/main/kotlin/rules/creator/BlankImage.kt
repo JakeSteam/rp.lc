@@ -1,6 +1,5 @@
-package rules
+package rules.creator
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable

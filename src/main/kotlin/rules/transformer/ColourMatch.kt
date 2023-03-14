@@ -1,4 +1,4 @@
-package rules
+package rules.transformer
 
 import kotlinx.serialization.Serializable
 

@@ -1,4 +1,4 @@
-package rules
+package rules.analyser
 
 import kotlinx.serialization.Serializable
 import util.FetchLog

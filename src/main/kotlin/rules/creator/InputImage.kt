@@ -1,4 +1,4 @@
-package rules
+package rules.creator
 
 import image.ImageReader
 import kotlinx.serialization.Serializable

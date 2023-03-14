@@ -2,8 +2,8 @@ package config
 
 import util.getInputParams
 import util.getReturnType
-import rules.creator.InputImage
-import rules.placer.OutputImage
+import rules.InputImage
+import rules.OutputImage
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.isSubtypeOf
 

@@ -1,3 +1,6 @@
 package rules
 
-interface BaseRule
+import kotlinx.serialization.Serializable
+
+@Serializable
+sealed class BaseRule

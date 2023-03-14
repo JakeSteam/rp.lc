@@ -1,8 +1,10 @@
-package rules.analyser
+package rules
 
+import kotlinx.serialization.Serializable
 import util.FetchLog
 
-object MostCommonOuter : Analyser {
+@Serializable
+object MostCommonOuter : Analyser() {
 
     override fun invoke(data: Array<IntArray>): Int {
         FetchLog.d("Looking for most common outer pixel")
@@ -37,7 +39,8 @@ object MostCommonOuter : Analyser {
 
 }
 
-object MostCommonInner : Analyser {
+@Serializable
+object MostCommonInner : Analyser() {
 
     override fun invoke(data: Array<IntArray>): Int {
         FetchLog.d("Looking for most common inner pixel")
@@ -56,7 +59,8 @@ object MostCommonInner : Analyser {
 
 }
 
-object MostCommon : Analyser {
+@Serializable
+object MostCommon : Analyser() {
 
     override fun invoke(data: Array<IntArray>): Int {
         FetchLog.d("Looking for most common pixel")

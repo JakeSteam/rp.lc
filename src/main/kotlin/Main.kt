@@ -4,13 +4,8 @@ import config.RuleValidator
 import image.ImageReader
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonBuilder
-import rules.analyser.MostCommonOuter
-import rules.creator.BlankImage
-import rules.creator.InputImage
-import rules.placer.ApplyMask
-import rules.placer.OutputImage
-import rules.transformer.ColourMatch
+import kotlinx.serialization.modules.SerializersModule
+import rules.*
 import util.HexReader
 
 fun main(args: Array<String>) {
@@ -53,7 +48,7 @@ fun main(args: Array<String>) {
         )
     )
 
-    val json = JsonBuilder.
+    val json = Json.encodeToString(testConfig)
     val b = 5
 
     // Validator

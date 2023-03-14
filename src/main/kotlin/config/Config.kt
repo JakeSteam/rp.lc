@@ -1,5 +1,6 @@
 package config
 
+import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable
 
 @Serializable

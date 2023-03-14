@@ -1,8 +1,8 @@
-package rules.placer
+package rules
 
 import config.Config
 
-object ApplyMask : Placer {
+object ApplyMask : Placer() {
     override fun invoke(image: Array<IntArray>, mask: Array<BooleanArray>, ifTrue: Config.Tile, ifFalse: Config.Tile): Array<IntArray> {
         for (y in mask.indices) {
             for (x in mask[0].indices) {

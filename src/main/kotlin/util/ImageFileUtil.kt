@@ -1,13 +1,15 @@
-package image
+package util
 
+import image.ImageLog
 import java.awt.image.BufferedImage
 import java.awt.image.DataBufferByte
 import java.io.File
+import java.io.IOException
 import java.nio.file.Paths
 import javax.imageio.ImageIO
 
 
-class ImageReader {
+class ImageFileUtil {
 
     data class ImageReaderResult(val bytes: Array<IntArray>, val filename: String)
 
@@ -24,6 +26,12 @@ class ImageReader {
         val projectDir = Paths.get("").toAbsolutePath().toString()
         val inputDir = "/input/"
         return File(projectDir + inputDir)
+    }
+
+    private fun getOutputPath(filename: String): File {
+        val projectDir = Paths.get("").toAbsolutePath().toString()
+        val inputDir = "/output/"
+        return File(projectDir + inputDir, filename)
     }
 
     private fun getFirstValidFile(directory: File): File? {
@@ -84,6 +92,25 @@ class ImageReader {
             }
         }
         return result
+    }
+
+    fun save(bytes: Array<IntArray>, filename: String): Boolean {
+        val output = getOutputPath(filename)
+        output.mkdirs()
+
+        val image = BufferedImage(bytes[0].size, bytes.size, BufferedImage.TYPE_INT_ARGB)
+        for (y in bytes.indices) {
+            for (x in bytes[0].indices) {
+                image.setRGB(x, y, bytes[y][x])
+                ImageLog.pixel(x, y, bytes[y][x])
+            }
+        }
+
+        return try {
+            ImageIO.write(image, "png", output)
+        } catch (e: IOException) {
+            false
+        }
     }
 
 }

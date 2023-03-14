@@ -1,26 +1,26 @@
-package config
+package util
 
+import config.Config
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.serializer
 import rules.BaseRule
+import rules.analyser.Analyser
 import rules.analyser.MostCommon
 import rules.analyser.MostCommonInner
 import rules.analyser.MostCommonOuter
 import rules.creator.BlankImage
-import rules.creator.Creator
 import rules.creator.InputImage
 import rules.placer.ApplyMask
 import rules.placer.OutputImage
 import rules.transformer.ColourMatch
-import java.awt.image.BufferedImage
-import java.awt.image.DataBufferByte
 import java.io.File
 import java.nio.file.Paths
-import javax.imageio.ImageIO
 
 
-class ConfigReader {
+class ConfigFileUtil {
 
     private val jsonConfig = Json {
         serializersModule = SerializersModule {

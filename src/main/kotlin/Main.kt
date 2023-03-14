@@ -1,30 +1,25 @@
 import config.GenerationRuleActioner
 import config.Config
-import config.ConfigReader
+import util.ConfigFileUtil
 import config.RuleValidator
-import image.ImageReader
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.SerializersModule
-import rules.*
+import util.ImageFileUtil
 import rules.analyser.MostCommonOuter
 import rules.creator.BlankImage
-import rules.creator.Creator
 import rules.creator.InputImage
 import rules.placer.ApplyMask
 import rules.placer.OutputImage
 import rules.transformer.ColourMatch
-import util.HexReader
+import util.ColourUtil
 
 fun main(args: Array<String>) {
-    val inputData = ImageReader().loadImage()
+    val inputData = ImageFileUtil().loadImage()
     if (inputData == null || inputData.bytes.size < 10 || inputData.bytes[1].size < 10) {
         return
     }
 
-    //ConfigReader().saveConfig(testConfig)
+    //ConfigFileUtil().saveConfig(testConfig)
 
-    val config = ConfigReader().loadConfig() ?: return
+    val config = ConfigFileUtil().loadConfig() ?: return
 
     RuleValidator().identifyConfigErrors(config)?.let {
         println("Uh oh: $it")
@@ -42,8 +37,8 @@ val testConfig = Config(
         engineVersion = "0.0.1"
     ),
     tiles = listOf(
-        Config.Tile("Water", "Used to swim in", HexReader.toColor("#3383FF")!!.rgb),
-        Config.Tile("Land", "Used to walk on", HexReader.toColor("#10A949")!!.rgb)
+        Config.Tile("Water", "Used to swim in", ColourUtil.toColor("#3383FF")!!.rgb),
+        Config.Tile("Land", "Used to walk on", ColourUtil.toColor("#10A949")!!.rgb)
     ),
     rules = listOf(
         Config.GenerationRule(

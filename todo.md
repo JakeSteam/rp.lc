@@ -10,9 +10,10 @@
 
 - [x] Define config file schema
 - [x] Be able to handle arbitrary rules
-- [ ] Have example JSON
-- [ ] Be able to convert JSON into data classes
+- [x] Have example JSON
+- [x] Be able to convert JSON into data classes
 - [ ] Rename "config" into "recipe"
+- [ ] Autoparse rules
 
 ### UI
 

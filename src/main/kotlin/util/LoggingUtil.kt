@@ -1,6 +1,6 @@
 package util
 
-class FetchLog {
+class LoggingUtil {
     companion object {
         fun pixel(x: Int, y: Int, colour: Int) =
             d("Checked x: $x, y: $y, it was $colour")

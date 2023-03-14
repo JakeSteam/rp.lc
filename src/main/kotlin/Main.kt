@@ -1,21 +1,14 @@
 import config.GenerationRuleActioner
 import config.Config
-import util.ConfigFileUtil
 import config.RuleValidator
-import util.ImageFileUtil
 import rules.analyser.MostCommonOuter
 import rules.creator.BlankImage
-import rules.creator.InputImage
 import rules.placer.ApplyMask
 import rules.placer.OutputImage
 import rules.transformer.ColourMatch
 import util.ColourUtil
 
 fun main(args: Array<String>) {
-    val inputData = ImageFileUtil().loadImage()
-    if (inputData == null || inputData.bytes.size < 10 || inputData.bytes[1].size < 10) {
-        return
-    }
 
     //ConfigFileUtil().saveConfig(testConfig)
 
@@ -26,7 +19,10 @@ fun main(args: Array<String>) {
         return
     }
 
-    GenerationRuleActioner().performGenerationRules(config.rules, config.tiles)
+    val engine = GenerationRuleActioner()
+    val input = engine.prepareInput() ?: return
+    engine.performGenerationRules(input, config.rules, config.tiles)
+    engine.prepareOutput()
 }
 
 val testConfig = Config(
@@ -49,9 +45,6 @@ val testConfig = Config(
         Config.Resource("Grass", "It's green", ColourUtil.toColor("#10A949")!!.rgb, 1)
     ),
     rules = listOf(
-        Config.GenerationRule(
-            InputImage, "input", arrayListOf()
-        ),
         Config.GenerationRule(
             BlankImage, "outputImage", arrayListOf("input")
         ),

@@ -2,9 +2,7 @@ package config
 
 import util.getInputParams
 import util.getReturnType
-import rules.creator.InputImage
 import rules.placer.OutputImage
-import java.awt.Color
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.isSubtypeOf
 
@@ -49,7 +47,6 @@ class RuleValidator {
     }
 
     private fun identifyGenerationRuleFrequencyErrors(rules: List<Config.GenerationRule>): String? {
-        rules.singleOrNull { it.rule == InputImage } ?: return "More / less than one image input rule found"
         rules.singleOrNull { it.rule == OutputImage } ?: return "More / less than one image output rule found"
         return null
     }
@@ -59,7 +56,6 @@ class RuleValidator {
         val allInputs = rules.flatMap { it.inputIds }
 
         rules.forEach { generationRule ->
-            if (generationRule.rule == InputImage) return@forEach
             if (generationRule.rule == OutputImage) return@forEach // No! Need to check inputs!
 
             // Check all inputs are provided

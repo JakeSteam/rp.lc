@@ -1,18 +1,14 @@
 package util
 
 import config.Config
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.serializer
 import rules.BaseRule
-import rules.analyser.Analyser
 import rules.analyser.MostCommon
 import rules.analyser.MostCommonInner
 import rules.analyser.MostCommonOuter
 import rules.creator.BlankImage
-import rules.creator.InputImage
 import rules.placer.ApplyMask
 import rules.placer.OutputImage
 import rules.transformer.ColourMatch
@@ -31,7 +27,6 @@ class ConfigFileUtil {
 
             // Creator
             polymorphic(BaseRule::class, BlankImage::class, BlankImage.serializer())
-            polymorphic(BaseRule::class, InputImage::class, InputImage.serializer())
 
             // Placer
             polymorphic(BaseRule::class, ApplyMask::class, ApplyMask.serializer())

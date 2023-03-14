@@ -11,6 +11,8 @@
 - [x] Support defining custom resources in JSON
 - [x] Add to validator
 - [ ] Support tiles generating / using these resources
+  - [ ] Extract input & output OUT of rules, and into something hardcoded
+  - [ ] Make width / height / filename / image info provided variables, and output a required output
 - [ ] Support output of these resources, maybe in img metadata
 - 
 ### Generation

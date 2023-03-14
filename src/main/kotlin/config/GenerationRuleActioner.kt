@@ -1,13 +1,27 @@
 package config
 
-import rules.creator.InputImage
 import rules.placer.OutputImage
+import util.ImageFileUtil
 
 class GenerationRuleActioner {
 
-    fun performGenerationRules(rules: List<Config.GenerationRule>, tiles: List<Config.Tile>) {
+    data class Input (
+        val image: Array<IntArray>,
+        val filename: String,
+        val width: Int,
+        val height: Int
+    )
+
+    fun prepareInput(): Input? {
+        val image = ImageFileUtil().loadImage()
+        if (image == null || image.bytes.size < 10 || image.bytes[0].size < 10) {
+            return null
+        }
+        return Input(image.bytes, image.filename, image.bytes[0].size, image.bytes.size)
+    }
+
+    fun performGenerationRules(input: Input, rules: List<Config.GenerationRule>, tiles: List<Config.Tile>) {
         // Setup
-        val inputNode = rules.first { it.rule == InputImage }
         val outputNode = rules.first { it.rule == OutputImage }
         val dummyTile = Config.Tile("", "", 0, emptyList())
         val solvedNodes = hashMapOf<String, Any>()
@@ -16,7 +30,7 @@ class GenerationRuleActioner {
         tiles.forEach {
             solvedNodes[it.name] = it
         }
-        solvedNodes[inputNode.outputId] = InputImage.invoke(emptyArray())
+        solvedNodes["input"] = input
 
         // Whilst we haven't solved the final node, keep trying
         while (!solvedNodes.contains(outputNode.outputId)) {

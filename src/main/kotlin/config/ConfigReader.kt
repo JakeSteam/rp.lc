@@ -1,5 +1,18 @@
 package config
 
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
+import rules.BaseRule
+import rules.analyser.MostCommon
+import rules.analyser.MostCommonInner
+import rules.analyser.MostCommonOuter
+import rules.creator.BlankImage
+import rules.creator.Creator
+import rules.creator.InputImage
+import rules.placer.ApplyMask
+import rules.placer.OutputImage
+import rules.transformer.ColourMatch
 import java.awt.image.BufferedImage
 import java.awt.image.DataBufferByte
 import java.io.File
@@ -9,21 +22,48 @@ import javax.imageio.ImageIO
 
 class ConfigReader {
 
-    data class ImageReaderResult(val bytes: Array<IntArray>, val filename: String)
+    private val jsonConfig = Json {
+        serializersModule = SerializersModule {
+            // Analyser
+            polymorphic(BaseRule::class, MostCommon::class, MostCommon.serializer())
+            polymorphic(BaseRule::class, MostCommonInner::class, MostCommonInner.serializer())
+            polymorphic(BaseRule::class, MostCommonOuter::class, MostCommonOuter.serializer())
 
-    fun loadImage(): ImageReaderResult? {
-        val inputDir = getInputDir()
-        val validFile = getFirstValidFile(inputDir) ?: return null
-        val image = ImageIO.read(validFile)
-        //val scaledImage = resizeImage(image, 100, 100)
-        val bytes = imageToArray(image)
-        return ImageReaderResult(bytes, validFile.name)
+            // Creator
+            polymorphic(BaseRule::class, BlankImage::class, BlankImage.serializer())
+            polymorphic(BaseRule::class, InputImage::class, InputImage.serializer())
+
+            // Placer
+            polymorphic(BaseRule::class, ApplyMask::class, ApplyMask.serializer())
+            polymorphic(BaseRule::class, OutputImage::class, OutputImage.serializer())
+
+            // Transformer
+            polymorphic(BaseRule::class, ColourMatch::class, ColourMatch.serializer())
+        }
     }
 
-    private fun getInputDir(): File {
+    fun loadConfig(): Config? {
+        val configDir = getConfigDir()
+        val validFile = getFirstValidFile(configDir) ?: return null
+        val configStream = validFile.inputStream()
+        val configText = configStream.bufferedReader().use { it.readText() }
+        return jsonConfig.decodeFromString(Config.serializer(), configText)
+    }
+
+    fun saveConfig(config: Config) {
+        val configText = jsonConfig.encodeToString(config)
+        val configFile = getConfigDir("myconfig.cfg")
+        configFile.writeText(configText)
+    }
+
+    private fun getConfigDir(filename: String? = null): File {
         val projectDir = Paths.get("").toAbsolutePath().toString()
-        val inputDir = "/input/"
-        return File(projectDir + inputDir)
+        val configDir = "/configs/"
+        return if (!filename.isNullOrEmpty()) {
+            File(projectDir + configDir, filename)
+        } else {
+            File(projectDir + configDir)
+        }
     }
 
     private fun getFirstValidFile(directory: File): File? {
@@ -31,59 +71,7 @@ class ConfigReader {
 
         return directory.listFiles()
             ?.firstOrNull { file ->
-                file.isFile && file.extension == "png"
+                file.isFile && file.extension == "cfg"
             }
     }
-
-    // https://stackoverflow.com/a/9470843/608312
-    // e.g. bytes[1][5] = 1st row, 5th col = each array is a row
-    // So a loop will be row by row, left to right!
-    private fun imageToArray(image: BufferedImage): Array<IntArray> {
-        val pixels = (image.raster.dataBuffer as DataBufferByte).data
-        val width = image.width
-        val height = image.height
-        val hasAlphaChannel = image.alphaRaster != null
-        val result = Array(height) { IntArray(width) }
-        if (hasAlphaChannel) {
-            val pixelLength = 4
-            var pixel = 0
-            var row = 0
-            var col = 0
-            while (pixel + 3 < pixels.size) {
-                var argb = 0
-                argb += pixels[pixel].toInt() and 0xff shl 24 // alpha
-                argb += pixels[pixel + 1].toInt() and 0xff // blue
-                argb += pixels[pixel + 2].toInt() and 0xff shl 8 // green
-                argb += pixels[pixel + 3].toInt() and 0xff shl 16 // red
-                result[row][col] = argb
-                col++
-                if (col == width) {
-                    col = 0
-                    row++
-                }
-                pixel += pixelLength
-            }
-        } else {
-            val pixelLength = 3
-            var pixel = 0
-            var row = 0
-            var col = 0
-            while (pixel + 2 < pixels.size) {
-                var argb = 0
-                argb += -16777216 // 255 alpha
-                argb += pixels[pixel].toInt() and 0xff // blue
-                argb += pixels[pixel + 1].toInt() and 0xff shl 8 // green
-                argb += pixels[pixel + 2].toInt() and 0xff shl 16 // red
-                result[row][col] = argb
-                col++
-                if (col == width) {
-                    col = 0
-                    row++
-                }
-                pixel += pixelLength
-            }
-        }
-        return result
-    }
-
 }

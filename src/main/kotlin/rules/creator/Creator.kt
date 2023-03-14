@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializer
 import rules.BaseRule
 
 @Serializable
-abstract class Creator : BaseRule() {
+sealed class Creator : BaseRule() {
     abstract fun invoke(input: Array<IntArray>) : Array<IntArray>
 }

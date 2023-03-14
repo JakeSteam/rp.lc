@@ -34,7 +34,7 @@ class GenerationRuleActioner {
         tiles.forEach {
             solvedNodes[it.name] = it
         }
-        solvedNodes["input"] = input
+        solvedNodes["input"] = input.image
 
         // Whilst we haven't solved the final node, keep trying
         while (!solvedNodes.contains("output")) {
@@ -64,10 +64,5 @@ class GenerationRuleActioner {
             }
         }
         return solvedNodes["output"] as Array<IntArray>
-
-        // TODO: Return output
-        // Then make metadata be passed to each rule
-        // Then remove output rule
-        // Then update validator
     }
 }

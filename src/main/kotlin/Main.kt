@@ -4,7 +4,6 @@ import config.RuleValidator
 import rules.analyser.MostCommonOuter
 import rules.creator.BlankImage
 import rules.placer.ApplyMask
-import rules.placer.OutputImage
 import rules.transformer.ColourMatch
 import util.ColourUtil
 
@@ -20,9 +19,9 @@ fun main(args: Array<String>) {
     }
 
     val engine = GenerationRuleActioner()
-    val input = engine.prepareInput() ?: return
-    engine.performGenerationRules(input, config.rules, config.tiles)
-    engine.prepareOutput()
+    engine.prepareInput()
+    val output = engine.performGenerationRules(config.rules, config.tiles)
+    engine.prepareOutput(output)
 }
 
 val testConfig = Config(
@@ -56,9 +55,6 @@ val testConfig = Config(
         ),
         Config.GenerationRule(
             ApplyMask, "output", arrayListOf("outputImage", "matchingPixels", "Water", "Land")
-        ),
-        Config.GenerationRule(
-            OutputImage, "finalOutput", arrayListOf("output")
         )
     )
 )

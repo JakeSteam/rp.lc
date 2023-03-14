@@ -2,9 +2,10 @@ package config
 
 import util.getInputParams
 import util.getReturnType
-import rules.placer.OutputImage
+import kotlin.reflect.KTypeProjection
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.isSubtypeOf
+import kotlin.reflect.full.starProjectedType
 
 class RuleValidator {
 
@@ -12,7 +13,6 @@ class RuleValidator {
         identifyMetaErrors(config.meta)?.let { return it }
         identifyTileErrors(config.tiles, config.resources)?.let { return it }
         identifyResourceErrors(config.resources)?.let { return it }
-        identifyGenerationRuleFrequencyErrors(config.rules)?.let { return it }
         identifyGenerationRuleFlowErrors(config.tiles, config.rules)?.let { return it }
         return null
     }
@@ -46,24 +46,21 @@ class RuleValidator {
         return null
     }
 
-    private fun identifyGenerationRuleFrequencyErrors(rules: List<Config.GenerationRule>): String? {
-        rules.singleOrNull { it.rule == OutputImage } ?: return "More / less than one image output rule found"
-        return null
-    }
-
     private fun identifyGenerationRuleFlowErrors(tiles: List<Config.Tile>, rules: List<Config.GenerationRule>): String? {
         val allTiles = tiles.map { it.name }
         val allInputs = rules.flatMap { it.inputIds }
 
         rules.forEach { generationRule ->
-            if (generationRule.rule == OutputImage) return@forEach // No! Need to check inputs!
-
             // Check all inputs are provided
             val inputParamsNeeded = generationRule.rule.getInputParams()
             val inputParamsProvided = generationRule.inputIds.map { inputId ->
                 if (allTiles.contains(inputId)) {
                     Config.Tile::class.createType()
-                } else {
+                } else if (inputId == "input") {
+                    val intArray = IntArray::class.starProjectedType
+                    val projection = KTypeProjection.invariant(intArray)
+                    Array::class.createType(listOf(projection))
+                } else{
                     rules.firstOrNull { it.outputId == inputId }?.rule?.getReturnType()
                         ?: return "No value provided for $inputId, needed by ${generationRule.outputId}"
                 }

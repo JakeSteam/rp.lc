@@ -10,7 +10,6 @@ import rules.analyser.MostCommonInner
 import rules.analyser.MostCommonOuter
 import rules.creator.BlankImage
 import rules.placer.ApplyMask
-import rules.placer.OutputImage
 import rules.transformer.ColourMatch
 import java.io.File
 import java.nio.file.Paths
@@ -30,7 +29,6 @@ class ConfigFileUtil {
 
             // Placer
             polymorphic(BaseRule::class, ApplyMask::class, ApplyMask.serializer())
-            polymorphic(BaseRule::class, OutputImage::class, OutputImage.serializer())
 
             // Transformer
             polymorphic(BaseRule::class, ColourMatch::class, ColourMatch.serializer())

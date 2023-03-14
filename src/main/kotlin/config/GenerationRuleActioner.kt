@@ -9,7 +9,7 @@ class GenerationRuleActioner {
         // Setup
         val inputNode = rules.first { it.rule == InputImage }
         val outputNode = rules.first { it.rule == OutputImage }
-        val dummyTile = Config.Tile("", "", 0)
+        val dummyTile = Config.Tile("", "", 0, emptyList())
         val solvedNodes = hashMapOf<String, Any>()
 
         // Add all tiles / precalced

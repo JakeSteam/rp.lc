@@ -19,7 +19,7 @@ fun main(args: Array<String>) {
 
     //ConfigFileUtil().saveConfig(testConfig)
 
-    val config = ConfigFileUtil().loadConfig() ?: return
+    val config = testConfig //ConfigFileUtil().loadConfig() ?: return
 
     RuleValidator().identifyConfigErrors(config)?.let {
         println("Uh oh: $it")
@@ -37,8 +37,16 @@ val testConfig = Config(
         engineVersion = "0.0.1"
     ),
     tiles = listOf(
-        Config.Tile("Water", "Used to swim in", ColourUtil.toColor("#3383FF")!!.rgb),
-        Config.Tile("Land", "Used to walk on", ColourUtil.toColor("#10A949")!!.rgb)
+        Config.Tile("Water", "Used to swim in", ColourUtil.toColor("#3383FF")!!.rgb, listOf(
+            Config.Tile.ResourceChange("Water", 1),
+        )),
+        Config.Tile("Land", "Used to walk on", ColourUtil.toColor("#10A949")!!.rgb, listOf(
+            Config.Tile.ResourceChange("Grass", 5)
+        ))
+    ),
+    resources = listOf(
+        Config.Resource("Water", "It's wet", ColourUtil.toColor("#3383FF")!!.rgb, -1),
+        Config.Resource("Grass", "It's green", ColourUtil.toColor("#10A949")!!.rgb, 1)
     ),
     rules = listOf(
         Config.GenerationRule(

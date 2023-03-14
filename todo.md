@@ -6,29 +6,24 @@
 
 ## Functionality
 
-### Config file parsing
+### Resources
 
-- [x] Define config file schema
-- [x] Be able to handle arbitrary rules
-- [x] Have example JSON
-- [x] Be able to convert JSON into data classes
-- [ ] Rename "config" into "recipe"
-- [ ] Autoparse rules
+- [x] Support defining custom resources in JSON
+- [ ] Add to validator
+- [ ] Support tiles generating / using these resources
+- [ ] Support output of these resources, maybe in img metadata
+- 
+### Generation
+
+- [ ] Support 2nd layer of generation (structures), making sure to reuse most code
 
 ### UI
 
 - [ ] Research UI on Kt apps
+  - "Swing" is [natively supported](https://www.jetbrains.com/help/idea/creating-and-disposing-of-a-form-runtime-frame.html), but Java
+  - Would Compose work?
 - [ ] Basic GUI for picking config, and picking image, displaying output
 - [ ] Coherent debug & info log outputting system
-
-### Resources
-
-- [ ] Support defining custom resources in JSON
-- [ ] Support tiles generating / using these resources
-
-### Generation
-
-- [ ] Support 2nd layer of generation (structures), making sure to reuse most code
 
 ### Simulation
 

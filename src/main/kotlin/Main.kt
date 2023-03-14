@@ -31,13 +31,13 @@ fun main(args: Array<String>) {
                 InputImage, "input", arrayListOf()
             ),
             Config.GenerationRule(
-                MostCommonOuter, "outerPixelColour", arrayListOf("input"),
+                BlankImage, "outputImage", arrayListOf("input")
+            ),
+            Config.GenerationRule(
+                MostCommonOuter, "outerPixelColour", arrayListOf("input")
             ),
             Config.GenerationRule(
                 ColourMatch, "matchingPixels", arrayListOf("input", "outerPixelColour")
-            ),
-            Config.GenerationRule(
-                BlankImage, "outputImage", arrayListOf("input")
             ),
             Config.GenerationRule(
                 ApplyMask, "output", arrayListOf("outputImage", "matchingPixels", "Water", "Land")
@@ -48,8 +48,19 @@ fun main(args: Array<String>) {
         )
     )
 
-    val json = Json.encodeToString(testConfig)
-    val b = 5
+    val jsonSerializer = Json {
+        serializersModule = SerializersModule {
+            polymorphic(BaseRule::class, BlankImage::class, BlankImage.serializer())
+            polymorphic(BaseRule::class, InputImage::class, InputImage.serializer())
+            polymorphic(BaseRule::class, ColourMatch::class, ColourMatch.serializer())
+            polymorphic(BaseRule::class, MostCommonOuter::class, MostCommonOuter.serializer())
+            polymorphic(BaseRule::class, ApplyMask::class, ApplyMask.serializer())
+            polymorphic(BaseRule::class, OutputImage::class, OutputImage.serializer())
+        }
+    }
+    val json = jsonSerializer.encodeToString(testConfig)
+    println(json)
+    val config = jsonSerializer.decodeFromString(Config.serializer(), json)
 
     // Validator
     // Next steps:
@@ -58,10 +69,10 @@ fun main(args: Array<String>) {
     //  Extract that (fix filename hardcoding)
     //  Parse JSON
     //  Set up end to end proof of concept, update readme, sort logging etc
-    RuleValidator().identifyConfigErrors(testConfig)?.let {
+    RuleValidator().identifyConfigErrors(config)?.let {
         println("Uh oh: $it")
         return
     }
 
-    GenerationRuleActioner().performGenerationRules(testConfig.rules, testConfig.tiles)
+    GenerationRuleActioner().performGenerationRules(config.rules, config.tiles)
 }

@@ -1,5 +1,8 @@
 package rules
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 object ColourMatch : Transformer() {
     override fun invoke(data: Array<IntArray>, parameter: Any): Array<BooleanArray> {
         val output = Array(data.size) { BooleanArray(data[0].size) }

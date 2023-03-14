@@ -9,7 +9,7 @@
 ### Resources
 
 - [x] Support defining custom resources in JSON
-- [ ] Add to validator
+- [x] Add to validator
 - [ ] Support tiles generating / using these resources
 - [ ] Support output of these resources, maybe in img metadata
 - 

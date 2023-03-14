@@ -24,7 +24,7 @@ data class Config(
         val name: String,
         val description: String,
         val colour: Int,
-        val resources: List<ResourceChange>
+        val resourceChanges: List<ResourceChange>
     ) {
         @Serializable
         data class ResourceChange (

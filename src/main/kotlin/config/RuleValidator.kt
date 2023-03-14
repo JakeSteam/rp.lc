@@ -4,6 +4,7 @@ import util.getInputParams
 import util.getReturnType
 import rules.creator.InputImage
 import rules.placer.OutputImage
+import java.awt.Color
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.isSubtypeOf
 
@@ -11,7 +12,8 @@ class RuleValidator {
 
     fun identifyConfigErrors(config: Config): String? {
         identifyMetaErrors(config.meta)?.let { return it }
-        identifyTileErrors(config.tiles)?.let { return it }
+        identifyTileErrors(config.tiles, config.resources)?.let { return it }
+        identifyResourceErrors(config.resources)?.let { return it }
         identifyGenerationRuleFrequencyErrors(config.rules)?.let { return it }
         identifyGenerationRuleFlowErrors(config.tiles, config.rules)?.let { return it }
         return null
@@ -24,8 +26,22 @@ class RuleValidator {
         return null
     }
 
-    private fun identifyTileErrors(tiles: List<Config.Tile>): String? {
-        tiles.forEach {
+    private fun identifyTileErrors(tiles: List<Config.Tile>, resources: List<Config.Resource>): String? {
+        val allResourceNames = resources.map { it.name }
+        tiles.forEach { tile ->
+            if (tile.name.isEmpty()) { return "Tile name is empty" }
+            if (tile.description.isEmpty()) { return "Tile description is empty" }
+            tile.resourceChanges.forEach {
+                if (!allResourceNames.contains(it.resource)) {
+                    return "${tile.name} uses non-existent resource ${it.resource}"
+                }
+            }
+        }
+        return null
+    }
+
+    private fun identifyResourceErrors(resources: List<Config.Resource>): String? {
+        resources.forEach {
             if (it.name.isEmpty()) { return "Tile name is empty" }
             if (it.description.isEmpty()) { return "Tile description is empty" }
         }

@@ -1,8 +1,8 @@
-# PixelMetre
+# Replace (rp.lc)
 
 ## What is this?
 
-PixelMetre is a (very unfinished) engine & ecosystem for creating simulations that act based on input images.
+Replace is a (very unfinished) engine & ecosystem for creating simulations that act based on input images.
 
 For example, there could be an "Anthill" recipe that defines the rules for an ant colony and the life within. An image would then provide the "seed" for this colony, which would be converted by the sim rules into a full simulation.
 
@@ -25,9 +25,10 @@ Run `Main.kt` with an image file in `/input/`.
 
 Eventually this project will ideally end up as a collection of projects:
 
-* `PixelMetre Recipe Creator`: A drag & drop recipe creator.
-* `PixelMetre Recipe Store`: A listing of recipes, their metadata, samples, etc.
-* `PixelMetre Engine`: **This repo**, a tool that uses recipes to convert input images into simulations.
+* `Replace Recipe Creator`: A drag & drop recipe creator.
+* `Replace Recipe Store`: A listing of recipes, their metadata, samples, etc.
+* `Replace Engine`: **This repo**, a tool that uses recipes to convert input images into simulations.
+* `Rp.lc`: Documentation site.
 
 The projects will have shared modules / functionality, e.g. JSON / rule parsing & validation
 

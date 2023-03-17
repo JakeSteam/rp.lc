@@ -6,17 +6,24 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Config(
     val meta: Meta,
+    val gameConfig: GameConfig,
     val tiles: List<Tile>,
     val resources: List<Resource>,
     val rules: List<GenerationRule>
 ) {
 
     @Serializable
-    data class Meta (
+    data class Meta(
         val name: String,
         val engineVersion: String,
         val author: String,
         val authorUrl: String?
+    )
+
+    @Serializable
+    data class GameConfig(
+        val requiredScorePerRank: List<Pair<Int, String>>,
+        val outputWidthHeight: Pair<Int, Int>, // Unused
     )
 
     @Serializable

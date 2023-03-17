@@ -2,7 +2,7 @@
 
 ## Meta
 
-- [ ] Readme needs to contain coherent explanation / diagrams once PoC is done
+- [ ] Readme needs to contain coherent explanation / diagram
 
 ## Functionality
 
@@ -10,7 +10,7 @@
 
 - [x] Support defining custom resources in JSON
 - [x] Add to validator
-- [ ] Support tiles generating / using these resources
+- [x] Support tiles generating / using these resources
 - [ ] Support output of these resources, maybe in img metadata
 
 ### Generation

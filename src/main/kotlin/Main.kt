@@ -26,6 +26,10 @@ fun main(args: Array<String>) {
     val tiles = TileMapper.coloursToTiles(config.tiles, output)
     val resources = ResourceCalculator.tilesToResourceChanges(tiles, config.resources) // Totals are wrong?
     val score = resources.entries.sumOf { it.key.scoreImpact * it.value }
+    val rank = config.gameConfig.requiredScorePerRank
+        .sortedBy { it.first }
+        .findLast { it.first < score }?.second
+        ?: "No rank"
     engine.prepareOutput(output)
 
     println("Score: $score")
@@ -45,6 +49,16 @@ val testConfig = Config(
         author = "Jake Lee",
         authorUrl = "https://jakelee.co.uk",
         engineVersion = "0.0.1"
+    ),
+    gameConfig = Config.GameConfig(
+        requiredScorePerRank = listOf(
+            Pair(-50000, "Very Bad"),
+            Pair(-10000, "Bad"),
+            Pair(0, "OK"),
+            Pair(10000, "Good"),
+            Pair(50000, "Very Good"),
+        ),
+        outputWidthHeight = Pair(100, 100)
     ),
     tiles = listOf(
         Config.Tile("Water", "Used to swim in", ColourUtil.toColor("#3383FF")!!.rgb, listOf(

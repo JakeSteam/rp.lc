@@ -6,6 +6,7 @@ import rules.creator.BlankImage
 import rules.placer.ApplyMask
 import rules.transformer.ColourMatch
 import util.ColourUtil
+import util.TileUtil
 
 fun main(args: Array<String>) {
 
@@ -21,6 +22,7 @@ fun main(args: Array<String>) {
     val engine = GenerationRuleActioner()
     engine.prepareInput()
     val output = engine.performGenerationRules(config.rules, config.tiles)
+    val tiles = TileUtil.coloursToTiles(config.tiles, output)
     engine.prepareOutput(output)
 
     /*

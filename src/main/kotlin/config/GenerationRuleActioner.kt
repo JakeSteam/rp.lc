@@ -11,7 +11,7 @@ class GenerationRuleActioner {
         val height: Int
     )
 
-    private lateinit var input: Input
+    lateinit var input: Input
 
     fun prepareInput(): Input? {
         val image = ImageFileUtil().loadImage()
@@ -30,7 +30,6 @@ class GenerationRuleActioner {
         val solvedNodes = hashMapOf<String, Any>()
 
         // Add all tiles / precalced
-        // TODO: Add resources
         tiles.forEach {
             solvedNodes[it.name] = it
         }

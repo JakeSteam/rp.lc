@@ -56,7 +56,11 @@ class RuleValidator {
             val inputParamsProvided = generationRule.inputIds.map { inputId ->
                 if (allTiles.contains(inputId)) {
                     Config.Tile::class.createType()
-                } else if (inputId == "input") {
+                } else if (inputId == "inputFilename") {
+                    String::class.createType()
+                } else if (inputId == "inputWidth" || inputId == "inputHeight") {
+                    Int::class.createType()
+                } else if (inputId == "inputImage") {
                     val intArray = IntArray::class.starProjectedType
                     val projection = KTypeProjection.invariant(intArray)
                     Array::class.createType(listOf(projection))

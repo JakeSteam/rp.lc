@@ -6,5 +6,5 @@ import rules.BaseRule
 
 @Serializable
 sealed class Creator : BaseRule() {
-    abstract fun invoke(input: Array<IntArray>) : Array<IntArray>
+    abstract fun invoke(width: Int, height: Int) : Array<IntArray>
 }

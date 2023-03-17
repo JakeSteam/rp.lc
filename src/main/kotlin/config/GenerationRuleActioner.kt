@@ -34,7 +34,10 @@ class GenerationRuleActioner {
         tiles.forEach {
             solvedNodes[it.name] = it
         }
-        solvedNodes["input"] = input.image
+        solvedNodes["inputImage"] = input.image
+        solvedNodes["inputFilename"] = input.filename
+        solvedNodes["inputWidth"] = input.width
+        solvedNodes["inputHeight"] = input.height
 
         // Whilst we haven't solved the final node, keep trying
         while (!solvedNodes.contains("output")) {

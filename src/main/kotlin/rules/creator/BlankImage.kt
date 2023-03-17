@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 object BlankImage : Creator() {
 
-    override fun invoke(input: Array<IntArray>) : Array<IntArray> {
-        return Array(input.size) { IntArray(input[0].size) }
+    override fun invoke(width: Int, height: Int) : Array<IntArray> {
+        return Array(height) { IntArray(width) }
     }
 }

@@ -36,6 +36,9 @@
 ### Rules
 
 - [ ] Make more example rules
+- [ ] Ability to define collections of rules for reuse would be v powerful
+- [ ] If we have sub-packages, e.g. analyser -> singleoutput, can enforce any signature
+  - Although the whole interface structure is arbitrary...
 
 ## Technical
 

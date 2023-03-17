@@ -1,12 +1,13 @@
 import config.GenerationRuleActioner
 import config.Config
 import config.RuleValidator
+import resources.ResourceCalculator
 import rules.analyser.MostCommonOuter
 import rules.creator.BlankImage
 import rules.placer.ApplyMask
 import rules.transformer.ColourMatch
 import util.ColourUtil
-import util.TileUtil
+import resources.TileMapper
 
 fun main(args: Array<String>) {
 
@@ -22,8 +23,12 @@ fun main(args: Array<String>) {
     val engine = GenerationRuleActioner()
     engine.prepareInput()
     val output = engine.performGenerationRules(config.rules, config.tiles)
-    val tiles = TileUtil.coloursToTiles(config.tiles, output)
+    val tiles = TileMapper.coloursToTiles(config.tiles, output)
+    val resources = ResourceCalculator.tilesToResourceChanges(tiles, config.resources) // Totals are wrong?
+    val score = resources.entries.sumOf { it.key.scoreImpact * it.value }
     engine.prepareOutput(output)
+
+    println("Score: $score")
 
     /*
     TODO:
@@ -46,7 +51,7 @@ val testConfig = Config(
             Config.Tile.ResourceChange("Water", 1),
         )),
         Config.Tile("Land", "Used to walk on", ColourUtil.toColor("#10A949")!!.rgb, listOf(
-            Config.Tile.ResourceChange("Grass", 5)
+            Config.Tile.ResourceChange("Grass", 1)
         ))
     ),
     resources = listOf(

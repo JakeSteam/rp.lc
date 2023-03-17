@@ -1,8 +1,8 @@
-package util
+package resources
 
 import config.Config
 
-class TileUtil {
+class TileMapper {
     companion object {
         fun coloursToTiles(tiles: List<Config.Tile>, image: Array<IntArray>): Array<Array<Config.Tile>> {
             val imageTiles = Array(image.size) {

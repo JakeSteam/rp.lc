@@ -49,17 +49,15 @@ class ImageFileUtil {
     private fun getRGBPixels(img: BufferedImage): Array<IntArray> {
         val result: Array<IntArray>
         return try {
-            val g = PixelGrabber(img, 0, 0, -1, -1, true)
-            g.grabPixels()
-            val pixels = g.pixels as IntArray
-            val w = g.width
-            val h = g.height
-            result = Array(w) { IntArray(h) }
-            var j = 0
+            val grabber = PixelGrabber(img, 0, 0, -1, -1, true)
+            grabber.grabPixels()
+            val pixels = grabber.pixels as IntArray
+            result = Array(grabber.width) { IntArray(grabber.height) }
             var count = 0
-            while (j < h) {
-                for (i in 0 until w) result[i][j] = pixels[count++]
-                j++
+            for (y in 0 until grabber.height) {
+                for (x in 0 until grabber.width) {
+                    result[y][x] = pixels[count++]
+                }
             }
             result
         } catch (ex: Exception) {

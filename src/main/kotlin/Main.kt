@@ -50,8 +50,8 @@ val testConfig = Config(
             Pair(10000, "Good"),
             Pair(50000, "Very Good"),
         ),
-        outputWidth = 100,
-        outputHeight = 100
+        outputWidth = 50,
+        outputHeight = 10
     ),
     tiles = listOf(
         Config.Tile("Water", "Used to swim in", ColourUtil.toColor("#3383FF")!!.rgb, listOf(

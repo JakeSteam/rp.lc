@@ -46,13 +46,14 @@ class ImageFileUtil {
             }
     }
 
+    // http://www.java2s.com/example/java/2d-graphics/gets-the-bufferedimage-as-a-2d-array-of-rgb-pixel-values.html
     private fun getRGBPixels(img: BufferedImage): Array<IntArray> {
         val result: Array<IntArray>
         return try {
             val grabber = PixelGrabber(img, 0, 0, -1, -1, true)
             grabber.grabPixels()
             val pixels = grabber.pixels as IntArray
-            result = Array(grabber.width) { IntArray(grabber.height) }
+            result = Array(grabber.height) { IntArray(grabber.width) }
             var count = 0
             for (y in 0 until grabber.height) {
                 for (x in 0 until grabber.width) {
@@ -66,6 +67,7 @@ class ImageFileUtil {
         }
     }
 
+    // https://memorynotfound.com/java-resize-image-fixed-width-height-example/
     private fun resize(img: BufferedImage, height: Int, width: Int): BufferedImage? {
         val tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH)
         val resized = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)

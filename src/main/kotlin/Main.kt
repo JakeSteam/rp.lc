@@ -21,7 +21,7 @@ fun main(args: Array<String>) {
     }
 
     val engine = GenerationRuleActioner()
-    engine.prepareInput()
+    engine.prepareInput(config.gameConfig.outputWidth, config.gameConfig.outputHeight)
     val output = engine.performGenerationRules(config.rules, config.tiles)
     val tiles = TileMapper.coloursToTiles(config.tiles, output)
     val resources = ResourceCalculator.tilesToResourceChanges(tiles, config.resources) // Totals are wrong?
@@ -50,7 +50,8 @@ val testConfig = Config(
             Pair(10000, "Good"),
             Pair(50000, "Very Good"),
         ),
-        outputWidthHeight = Pair(100, 100)
+        outputWidth = 10,
+        outputHeight = 10
     ),
     tiles = listOf(
         Config.Tile("Water", "Used to swim in", ColourUtil.toColor("#3383FF")!!.rgb, listOf(

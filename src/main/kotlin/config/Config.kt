@@ -23,7 +23,8 @@ data class Config(
     @Serializable
     data class GameConfig(
         val requiredScorePerRank: List<Pair<Int, String>>,
-        val outputWidthHeight: Pair<Int, Int>, // Unused
+        val outputWidth: Int,
+        val outputHeight: Int
     )
 
     @Serializable

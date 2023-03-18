@@ -42,7 +42,7 @@
 
 ### Image handling
 
-- [ ] Handle bmps / jpgs etc
+- [x] Handle bmps / jpgs etc
 - [ ] Scale all input images to XxY (depending on config, 100x100 default)
 - [ ] Support SVG definitions for tiles
 - [ ] Output as SVG & PNG (10x render)

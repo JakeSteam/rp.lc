@@ -1,8 +1,10 @@
 package util
 
 import image.ImageLog
+import java.awt.Image
 import java.awt.image.BufferedImage
 import java.awt.image.DataBufferByte
+import java.awt.image.DataBufferInt
 import java.io.File
 import java.io.IOException
 import java.nio.file.Paths
@@ -13,11 +15,11 @@ class ImageFileUtil {
 
     data class ImageReaderResult(val bytes: Array<IntArray>, val filename: String)
 
-    fun loadImage(): ImageReaderResult? {
+    fun loadImage(width: Int, height: Int): ImageReaderResult? {
         val inputDir = getInputDir()
         val validFile = getFirstValidFile(inputDir) ?: return null
         val image = ImageIO.read(validFile)
-        //val scaledImage = resizeImage(image, 100, 100)
+        //val scaledImage = resize(image, height, width)!!
         val bytes = imageToArray(image)
         return ImageReaderResult(bytes, validFile.nameWithoutExtension)
     }
@@ -42,6 +44,15 @@ class ImageFileUtil {
             ?.firstOrNull { file ->
                 file.canRead() && supportedExtensions.contains(file.extension)
             }
+    }
+
+    private fun resize(img: BufferedImage, height: Int, width: Int): BufferedImage? {
+        val tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH)
+        val resized = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
+        val g2d = resized.createGraphics()
+        g2d.drawImage(tmp, 0, 0, null)
+        g2d.dispose()
+        return resized
     }
 
     // https://stackoverflow.com/a/9470843/608312

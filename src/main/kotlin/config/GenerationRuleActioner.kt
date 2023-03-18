@@ -13,8 +13,8 @@ class GenerationRuleActioner {
 
     lateinit var input: Input
 
-    fun prepareInput(): Input? {
-        val image = ImageFileUtil().loadImage()
+    fun prepareInput(width: Int, height: Int): Input? {
+        val image = ImageFileUtil().loadImage(width, height)
         if (image == null || image.bytes.size < 10 || image.bytes[0].size < 10) {
             return null
         }

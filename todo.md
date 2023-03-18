@@ -50,5 +50,5 @@
 ### Code quality
 
 - [ ] RuleValidator should have infinite loop detection
-- [ ] Hardcoded filename needs to copy input
-- [ ] Review input / output exceptions (e.g. skipping check in RuleValidator)
+- [ ] Actually handle exceptions properly
+- [ ] Improve architecture

@@ -32,15 +32,7 @@ fun main(args: Array<String>) {
         ?: "No rank"
     engine.prepareOutput(output)
 
-    println("Score: $score")
-
-    /*
-    TODO:
-    - How can each rule have access to metadata?
-    - Instead of 1 big input object, there is "inputImage", "inputWidth" etc
-    - Then config rules can easily use them, or use any other output
-    - Don't forget to remove `= input.image`!
-     */
+    println("$rank: $score")
 }
 
 val testConfig = Config(

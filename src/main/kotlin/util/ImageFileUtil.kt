@@ -19,7 +19,7 @@ class ImageFileUtil {
         val image = ImageIO.read(validFile)
         //val scaledImage = resizeImage(image, 100, 100)
         val bytes = imageToArray(image)
-        return ImageReaderResult(bytes, validFile.name)
+        return ImageReaderResult(bytes, validFile.nameWithoutExtension)
     }
 
     private fun getInputDir(): File {
@@ -37,9 +37,10 @@ class ImageFileUtil {
     private fun getFirstValidFile(directory: File): File? {
         if (!directory.isDirectory) return null
 
+        val supportedExtensions = arrayOf("png", "bmp", "jpg", "jpeg", "gif")
         return directory.listFiles()
             ?.firstOrNull { file ->
-                file.isFile && file.extension == "png"
+                file.canRead() && supportedExtensions.contains(file.extension)
             }
     }
 
@@ -95,7 +96,7 @@ class ImageFileUtil {
     }
 
     fun save(bytes: Array<IntArray>, filename: String): Boolean {
-        val output = getOutputPath(filename)
+        val output = getOutputPath("$filename.png")
         output.mkdirs()
 
         val image = BufferedImage(bytes[0].size, bytes.size, BufferedImage.TYPE_INT_ARGB)

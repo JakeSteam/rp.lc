@@ -4,7 +4,7 @@ import image.ImageLog
 import java.awt.Image
 import java.awt.image.BufferedImage
 import java.awt.image.DataBufferByte
-import java.awt.image.DataBufferInt
+import java.awt.image.PixelGrabber
 import java.io.File
 import java.io.IOException
 import java.nio.file.Paths
@@ -19,8 +19,8 @@ class ImageFileUtil {
         val inputDir = getInputDir()
         val validFile = getFirstValidFile(inputDir) ?: return null
         val image = ImageIO.read(validFile)
-        //val scaledImage = resize(image, height, width)!!
-        val bytes = imageToArray(image)
+        val scaledImage = resize(image, height, width)!!
+        val bytes = getRGBPixels(scaledImage)!! //imageToArray(image)
         return ImageReaderResult(bytes, validFile.nameWithoutExtension)
     }
 
@@ -46,6 +46,28 @@ class ImageFileUtil {
             }
     }
 
+    private fun getRGBPixels(img: BufferedImage): Array<IntArray> {
+        val result: Array<IntArray>
+        return try {
+            val g = PixelGrabber(img, 0, 0, -1, -1, true)
+            g.grabPixels()
+            val pixels = g.pixels as IntArray
+            val w = g.width
+            val h = g.height
+            result = Array(w) { IntArray(h) }
+            var j = 0
+            var count = 0
+            while (j < h) {
+                for (i in 0 until w) result[i][j] = pixels[count++]
+                j++
+            }
+            result
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            emptyArray()
+        }
+    }
+
     private fun resize(img: BufferedImage, height: Int, width: Int): BufferedImage? {
         val tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH)
         val resized = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
@@ -53,57 +75,6 @@ class ImageFileUtil {
         g2d.drawImage(tmp, 0, 0, null)
         g2d.dispose()
         return resized
-    }
-
-    // https://stackoverflow.com/a/9470843/608312
-    // e.g. bytes[1][5] = 1st row, 5th col = each array is a row
-    // So a loop will be row by row, left to right!
-    private fun imageToArray(image: BufferedImage): Array<IntArray> {
-        val pixels = (image.raster.dataBuffer as DataBufferByte).data
-        val width = image.width
-        val height = image.height
-        val hasAlphaChannel = image.alphaRaster != null
-        val result = Array(height) { IntArray(width) }
-        if (hasAlphaChannel) {
-            val pixelLength = 4
-            var pixel = 0
-            var row = 0
-            var col = 0
-            while (pixel + 3 < pixels.size) {
-                var argb = 0
-                argb += pixels[pixel].toInt() and 0xff shl 24 // alpha
-                argb += pixels[pixel + 1].toInt() and 0xff // blue
-                argb += pixels[pixel + 2].toInt() and 0xff shl 8 // green
-                argb += pixels[pixel + 3].toInt() and 0xff shl 16 // red
-                result[row][col] = argb
-                col++
-                if (col == width) {
-                    col = 0
-                    row++
-                }
-                pixel += pixelLength
-            }
-        } else {
-            val pixelLength = 3
-            var pixel = 0
-            var row = 0
-            var col = 0
-            while (pixel + 2 < pixels.size) {
-                var argb = 0
-                argb += -16777216 // 255 alpha
-                argb += pixels[pixel].toInt() and 0xff // blue
-                argb += pixels[pixel + 1].toInt() and 0xff shl 8 // green
-                argb += pixels[pixel + 2].toInt() and 0xff shl 16 // red
-                result[row][col] = argb
-                col++
-                if (col == width) {
-                    col = 0
-                    row++
-                }
-                pixel += pixelLength
-            }
-        }
-        return result
     }
 
     fun save(bytes: Array<IntArray>, filename: String): Boolean {

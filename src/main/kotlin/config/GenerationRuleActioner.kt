@@ -54,9 +54,17 @@ class GenerationRuleActioner {
                     // Pull the outputs we need
                     val relevantSolvedNodes = solvedNodes
                         .filterKeys { ruleInputNames.contains(it) }
-                        .toSortedMap(compareBy {
-                            ruleInputNames.indexOf(it)
-                        })
+                        .toMutableMap()
+
+                    // Add the concrete values we need
+                    (ruleInputNames - relevantSolvedNodes.keys).forEach {
+                        relevantSolvedNodes[it] = it.toIntOrNull() ?: it
+                    }
+
+                    // Prep them for use (should be key / value...)
+                    val mapped = relevantSolvedNodes.toSortedMap(compareBy {
+                        ruleInputNames.indexOf(it)
+                    })
 
                     // Invoke function with the retrieved outputs
                     println("About to call ${generationRule.outputId} (${generationRule.rule}), we have ${relevantSolvedNodes.size} inputs")
@@ -64,7 +72,7 @@ class GenerationRuleActioner {
                     val nodeOutput =
                         generationRule.rule::class.members.find { it.name == "invoke" }!!.call(
                             instance,
-                            *relevantSolvedNodes.values.toTypedArray()
+                            *mapped.values.toTypedArray()
                         )
                     // Add the result into solved nodes, for future use
                     solvedNodes[generationRule.outputId] = nodeOutput!!

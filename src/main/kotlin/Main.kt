@@ -80,7 +80,7 @@ val testConfig = Config(
         Config.GenerationRule(
             ColourMatch, "matchingPixels", mapOf(
                 "data" to "inputImage",
-                "colour" to "outerPixelColour"
+                "colour" to "-12820063"
             )
         ),
         Config.GenerationRule(

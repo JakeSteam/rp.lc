@@ -2,6 +2,7 @@ package config
 
 import util.getInputParams
 import util.getReturnType
+import kotlin.reflect.KType
 import kotlin.reflect.KTypeProjection
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.isSubtypeOf
@@ -52,10 +53,9 @@ class RuleValidator {
 
         // TODO: This check is inefficient now we have the param IDs
         rules.forEach { generationRule ->
-            // Check all inputs are provided
-            val inputParamsNeeded = generationRule.rule.getInputParams()
+            // Map all parameters to their types
             val inputParamsProvided = generationRule.inputMap.map { inputId ->
-                val type = if (allTiles.contains(inputId.value)) {
+                val type: KType = if (allTiles.contains(inputId.value)) {
                     Config.Tile::class.createType()
                 } else if (inputId.value == "inputFilename") {
                     String::class.createType()
@@ -66,21 +66,28 @@ class RuleValidator {
                     val projection = KTypeProjection.invariant(intArray)
                     Array::class.createType(listOf(projection))
                 } else {
+                    // Check passed variable
                     rules.firstOrNull { it.outputId == inputId.value }?.rule?.getReturnType()
-                        ?: return "No value provided for ${inputId.value}, needed by ${generationRule.outputId} (as ${inputId.key})"
+                        ?: String::class.createType()
                 }
-                Pair(inputId.key, type)
+                Triple(inputId.key, inputId.value, type)
             }
-            inputParamsNeeded.forEach { needed ->
+
+            // Check all inputs are provided
+            generationRule.rule.getInputParams().forEach { needed ->
                 val provided = inputParamsProvided.firstOrNull { it.first == needed.name }
                     ?: return "No value provided for ${needed.name} in ${generationRule.rule}"
-                if (needed.type != provided.second && needed.type.isSubtypeOf(provided.second)) {
-                    return "${needed.name} required ${needed.type}, but received $provided"
+                if (!(needed.type == provided.third) &&
+                    !(needed.type.isSubtypeOf(provided.third)) &&
+                    !(needed.type == Int::class.createType() && provided.second.toIntOrNull() != null)) {
+                    return "${generationRule.rule}'s ${needed.name} required ${needed.type}, but received a ${provided.second}"
                 }
             }
 
             // Check output is utilised
-            allInputs.contains(generationRule.outputId)
+            /*if (!allInputs.contains(generationRule.outputId)) {
+                return "${generationRule.outputId} is generated but not used anywhere."
+            }*/
 
             // Check no infinite loops
         }

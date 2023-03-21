@@ -38,6 +38,11 @@ class GenerationRuleActioner {
         solvedNodes["inputWidth"] = input.width
         solvedNodes["inputHeight"] = input.height
 
+        // Find concrete values
+        val allOutputs = rules.map { it.outputId } + solvedNodes.keys
+        val allDynamicInputs = rules.flatMap { it.inputMap.values }
+        val concreteValues = allDynamicInputs - allOutputs
+
         // Whilst we haven't solved the final node, keep trying
         while (!solvedNodes.contains("output")) {
             // Get all the nodes that haven't been solved yet
@@ -45,7 +50,7 @@ class GenerationRuleActioner {
             targetNodes.forEach { generationRule ->
                 // For each one, if all needed inputs have been obtained, invoke it
                 val ruleInputNames = generationRule.inputMap.values
-                if (solvedNodes.keys.containsAll(ruleInputNames)) {
+                if ((ruleInputNames - solvedNodes.keys - concreteValues).isEmpty()) {
                     // Pull the outputs we need
                     val relevantSolvedNodes = solvedNodes
                         .filterKeys { ruleInputNames.contains(it) }

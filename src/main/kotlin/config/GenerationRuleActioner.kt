@@ -2,6 +2,7 @@ package config
 
 import util.ImageFileUtil
 import util.getInputParams
+import kotlin.reflect.full.instanceParameter
 
 class GenerationRuleActioner {
 
@@ -62,21 +63,20 @@ class GenerationRuleActioner {
                         relevantSolvedNodes[it] = it.toIntOrNull() ?: it
                     }
 
-                    // Prep them for use (should be key / value...)
+                    // Prep them for use
                     val params = generationRule.rule.getInputParams()
                     val mapped = relevantSolvedNodes.mapKeys {
                         params.first { param ->
-                            param.name == it.key
+                            generationRule.inputMap[param.name] == it.key
                         }
                     }
 
                     // Invoke function with the retrieved outputs
                     println("About to call ${generationRule.outputId} (${generationRule.rule}), we have ${relevantSolvedNodes.size} inputs")
-                    val instance = generationRule.rule::class.objectInstance
-                    val nodeOutput =
-                        generationRule.rule::class.members.find { it.name == "invoke" }!!.callBy(
-                            mapped
-                        )
+                    val member = generationRule.rule::class.members.find { it.name == "invoke" }!!
+                    val prepped = mapped.plus(mapOf(member.instanceParameter!! to generationRule.rule))
+                    val nodeOutput = member.callBy(prepped)
+
                     // Add the result into solved nodes for future use
                     solvedNodes[generationRule.outputId] = nodeOutput!!
                 }

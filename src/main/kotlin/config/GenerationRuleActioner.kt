@@ -41,7 +41,7 @@ class GenerationRuleActioner {
         // Find concrete values
         val allOutputs = rules.map { it.outputId } + solvedNodes.keys
         val allDynamicInputs = rules.flatMap { it.inputMap.values }
-        val concreteValues = allDynamicInputs - allOutputs
+        val concreteValues = allDynamicInputs - allOutputs.toSet()
 
         // Whilst we haven't solved the final node, keep trying
         while (!solvedNodes.contains("output")) {
@@ -74,7 +74,7 @@ class GenerationRuleActioner {
                             instance,
                             *mapped.values.toTypedArray()
                         )
-                    // Add the result into solved nodes, for future use
+                    // Add the result into solved nodes for future use
                     solvedNodes[generationRule.outputId] = nodeOutput!!
                 }
             }

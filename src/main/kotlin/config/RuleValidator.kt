@@ -85,9 +85,9 @@ class RuleValidator {
             }
 
             // Check output is utilised
-            /*if (!allInputs.contains(generationRule.outputId)) {
+            if (!allInputs.contains(generationRule.outputId)) {
                 return "${generationRule.outputId} is generated but not used anywhere."
-            }*/
+            }
 
             // Check no infinite loops
         }

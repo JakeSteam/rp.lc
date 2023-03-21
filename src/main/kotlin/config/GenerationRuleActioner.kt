@@ -1,6 +1,7 @@
 package config
 
 import util.ImageFileUtil
+import util.getInputParams
 
 class GenerationRuleActioner {
 
@@ -62,17 +63,19 @@ class GenerationRuleActioner {
                     }
 
                     // Prep them for use (should be key / value...)
-                    val mapped = relevantSolvedNodes.toSortedMap(compareBy {
-                        ruleInputNames.indexOf(it)
-                    })
+                    val params = generationRule.rule.getInputParams()
+                    val mapped = relevantSolvedNodes.mapKeys {
+                        params.first { param ->
+                            param.name == it.key
+                        }
+                    }
 
                     // Invoke function with the retrieved outputs
                     println("About to call ${generationRule.outputId} (${generationRule.rule}), we have ${relevantSolvedNodes.size} inputs")
                     val instance = generationRule.rule::class.objectInstance
                     val nodeOutput =
-                        generationRule.rule::class.members.find { it.name == "invoke" }!!.call(
-                            instance,
-                            *mapped.values.toTypedArray()
+                        generationRule.rule::class.members.find { it.name == "invoke" }!!.callBy(
+                            mapped
                         )
                     // Add the result into solved nodes for future use
                     solvedNodes[generationRule.outputId] = nodeOutput!!

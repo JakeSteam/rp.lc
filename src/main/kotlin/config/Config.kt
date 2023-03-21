@@ -53,6 +53,6 @@ data class Config(
     data class GenerationRule (
         val rule: rules.BaseRule,
         val outputId: String,
-        val inputIds: ArrayList<String>,
+        val inputMap: Map<String, String>,
     )
 }

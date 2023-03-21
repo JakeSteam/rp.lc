@@ -44,12 +44,13 @@ class GenerationRuleActioner {
             val targetNodes = rules.filter { !solvedNodes.containsKey(it.outputId) }
             targetNodes.forEach { generationRule ->
                 // For each one, if all needed inputs have been obtained, invoke it
-                if (solvedNodes.keys.containsAll(generationRule.inputIds)) {
+                val ruleInputNames = generationRule.inputMap.values
+                if (solvedNodes.keys.containsAll(ruleInputNames)) {
                     // Pull the outputs we need
                     val relevantSolvedNodes = solvedNodes
-                        .filterKeys { generationRule.inputIds.contains(it) }
+                        .filterKeys { ruleInputNames.contains(it) }
                         .toSortedMap(compareBy {
-                            generationRule.inputIds.indexOf(it)
+                            ruleInputNames.indexOf(it)
                         })
 
                     // Invoke function with the retrieved outputs

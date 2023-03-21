@@ -67,16 +67,29 @@ val testConfig = Config(
     ),
     rules = listOf(
         Config.GenerationRule(
-            BlankImage, "outputImage", arrayListOf("inputWidth", "inputHeight")
+            BlankImage, "outputImage", mapOf(
+                "width" to "inputWidth",
+                "height" to "inputHeight"
+            )
         ),
         Config.GenerationRule(
-            MostCommonOuter, "outerPixelColour", arrayListOf("inputImage")
+            MostCommonOuter, "outerPixelColour", mapOf(
+                "data" to "inputImage"
+            )
         ),
         Config.GenerationRule(
-            ColourMatch, "matchingPixels", arrayListOf("inputImage", "outerPixelColour")
+            ColourMatch, "matchingPixels", mapOf(
+                "data" to "inputImage",
+                "colour" to "outerPixelColour"
+            )
         ),
         Config.GenerationRule(
-            ApplyMask, "output", arrayListOf("outputImage", "matchingPixels", "Water", "Land")
+            ApplyMask, "output", mapOf(
+                "data" to "outputImage",
+                "mask" to "matchingPixels",
+                "ifTrue" to "Water",
+                "ifFalse" to "Land"
+            )
         )
     )
 )

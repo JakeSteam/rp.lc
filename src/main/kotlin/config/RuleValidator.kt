@@ -48,31 +48,33 @@ class RuleValidator {
 
     private fun identifyGenerationRuleFlowErrors(tiles: List<Config.Tile>, rules: List<Config.GenerationRule>): String? {
         val allTiles = tiles.map { it.name }
-        val allInputs = rules.flatMap { it.inputIds }
+        val allInputs = rules.flatMap { it.inputMap.keys }
 
+        // TODO: This check is inefficient now we have the param IDs
         rules.forEach { generationRule ->
             // Check all inputs are provided
             val inputParamsNeeded = generationRule.rule.getInputParams()
-            val inputParamsProvided = generationRule.inputIds.map { inputId ->
-                if (allTiles.contains(inputId)) {
+            val inputParamsProvided = generationRule.inputMap.map { inputId ->
+                val type = if (allTiles.contains(inputId.value)) {
                     Config.Tile::class.createType()
-                } else if (inputId == "inputFilename") {
+                } else if (inputId.value == "inputFilename") {
                     String::class.createType()
-                } else if (inputId == "inputWidth" || inputId == "inputHeight") {
+                } else if (inputId.value == "inputWidth" || inputId.value == "inputHeight") {
                     Int::class.createType()
-                } else if (inputId == "inputImage") {
+                } else if (inputId.value == "inputImage") {
                     val intArray = IntArray::class.starProjectedType
                     val projection = KTypeProjection.invariant(intArray)
                     Array::class.createType(listOf(projection))
-                } else{
-                    rules.firstOrNull { it.outputId == inputId }?.rule?.getReturnType()
-                        ?: return "No value provided for $inputId, needed by ${generationRule.outputId}"
+                } else {
+                    rules.firstOrNull { it.outputId == inputId.value }?.rule?.getReturnType()
+                        ?: return "No value provided for ${inputId.value}, needed by ${generationRule.outputId} (as ${inputId.key})"
                 }
+                Pair(inputId.key, type)
             }
-            inputParamsNeeded.forEachIndexed { index, needed ->
-                val provided = inputParamsProvided.getOrNull(index)
+            inputParamsNeeded.forEach { needed ->
+                val provided = inputParamsProvided.firstOrNull { it.first == needed.name }
                     ?: return "No value provided for ${needed.name} in ${generationRule.rule}"
-                if (needed.type != provided && needed.type.isSubtypeOf(provided)) {
+                if (needed.type != provided.second && needed.type.isSubtypeOf(provided.second)) {
                     return "${needed.name} required ${needed.type}, but received $provided"
                 }
             }

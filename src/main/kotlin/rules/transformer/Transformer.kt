@@ -5,5 +5,5 @@ import rules.BaseRule
 
 @Serializable
 sealed class Transformer : BaseRule() {
-    abstract fun invoke(data: Array<IntArray>, parameter: Any): Array<BooleanArray>
+    abstract fun invoke(data: Array<IntArray>, colour: Int): Array<BooleanArray>
 }

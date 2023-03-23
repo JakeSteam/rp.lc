@@ -1,31 +1,24 @@
 # Replace (rp.lc)
 
-## What is this?
+## Q&A 
 
-Replace is a (very unfinished) engine & ecosystem for creating simulations that act based on input images.
+### What is this?
+
+Replace is a (very unfinished) [open source](https://github.com/JakeSteam/rp.lc) Kotlin engine & ecosystem for creating simulations that act based on input images.
 
 For example, there could be an "Anthill" recipe that defines the rules for an ant colony and the life within. An image would then provide the "seed" for this colony, which would be converted by the sim rules into a full simulation.
 
-## What can it do currently?
+The project aims to only use official Kotlin libraries and be entirely open source, and (for now!) is by [JakeSteam](https://github.com/JakeSteam).
+
+### What can it do currently?
 
 It can load an image from `/input/` and perform a set of JSON-derived rules on it. These rules identify the most common border pixel, colour all matching pixels blue, and all other pixels green.
 
-These rules are currently hardcoded in `Main.kt` (soon to be in JSON), [this is the logic flow](/docs/exampleFlow.png).
+These rules are currently hardcoded in `Main.kt` (export & import from JSON supported), [this is the logic flow](/docs/exampleFlow.png).
 
-## How can I use it?
+### How can I use rp.lc?
 
-Run `Main.kt` with an image file in `/input/`.
-
-## What's the end goal?
-
-Eventually this project will ideally end up as a collection of projects:
-
-* `Replace Recipe Creator`: A drag & drop recipe creator.
-* `Replace Recipe Store`: A listing of recipes, their metadata, samples, etc.
-* `Replace Engine`: **This repo**, a tool that uses recipes to convert input images into simulations.
-* `Rp.lc`: Documentation site.
-
-The projects will have shared modules / functionality, e.g. JSON / rule parsing & validation
+Run `Main.kt` with an image file in `/input/`. You might also want to play with the rules and chain them together in novel ways
 
 ## Roadmap
 
@@ -73,6 +66,10 @@ Goal: A GUI program for generating worlds from configs & images, with a high qua
 - [ ] Support rule blocks
   - [ ] Add ability to define a block of rules, with input and output
   - [ ] Add ability to validate these
+- [ ] Support life
+  - [ ] Add ability to define generation / tick rules for "life"
+  - [ ] Add ability to move every tick
+  - [ ] Add ability for structures to have life requirements
 - [ ] Support UI / deployment
   - [ ] Look into KMM webapps
   - [ ] Convert project, especially config / image input
@@ -102,4 +99,8 @@ Goal: A GUI program for generating worlds from configs & images, with a high qua
   - [ ] Add ability to load from main rp.lc app (with search)
   - [ ] Add unique name validation
   - [ ] Add public URLs for configs, displaying summary and CTA to load in rp.lc
-- [ ] Create detailed, autoupdating documentation along with visualisations etc
+- [ ] Create detailed, auto-updating documentation along with visualisations etc
+
+### Milestone 5: Community forming?
+
+- [ ] ???

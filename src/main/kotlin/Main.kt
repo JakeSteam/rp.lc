@@ -9,12 +9,12 @@ import rules.transformer.ColourMatch
 import util.ColourUtil
 import resources.TileMapper
 import rules.creator.BlankImage
+import util.ConfigFileUtil
 
 fun main(args: Array<String>) {
 
-    //ConfigFileUtil().saveConfig(testConfig)
-
-    val config = testConfig //ConfigFileUtil().loadConfig() ?: return
+    ConfigFileUtil().saveConfig(testConfig)
+    val config = ConfigFileUtil().loadConfig() ?: return
 
     RuleValidator().identifyConfigErrors(config)?.let {
         println("Uh oh: $it")

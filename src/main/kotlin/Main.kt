@@ -8,6 +8,7 @@ import rules.placer.ApplyMask
 import rules.transformer.ColourMatch
 import util.ColourUtil
 import resources.TileMapper
+import rules.creator.BlankImage
 
 fun main(args: Array<String>) {
 
@@ -54,10 +55,10 @@ val testConfig = Config(
         outputHeight = 10
     ),
     tiles = listOf(
-        Config.Tile("Water", "Used to swim in", ColourUtil.toColor("#000000")!!.rgb, listOf(
+        Config.Tile("Water", "Used to swim in", ColourUtil.toColor("#3383FF")!!.rgb, listOf(
             Config.Tile.ResourceChange("Water", 1),
         )),
-        Config.Tile("Land", "Used to walk on", ColourUtil.toColor("#FFFFFF")!!.rgb, listOf(
+        Config.Tile("Land", "Used to walk on", ColourUtil.toColor("#10A949")!!.rgb, listOf(
             Config.Tile.ResourceChange("Grass", 1)
         ))
     ),
@@ -67,9 +68,28 @@ val testConfig = Config(
     ),
     rules = listOf(
         Config.GenerationRule(
-            CheckerboardImage, "output", mapOf(
+            BlankImage, "outputImage", mapOf(
                 "width" to "inputWidth",
                 "height" to "inputHeight"
+            )
+        ),
+        Config.GenerationRule(
+            MostCommonOuter, "outerPixelColour", mapOf(
+                "data" to "inputImage"
+            )
+        ),
+        Config.GenerationRule(
+            ColourMatch, "matchingPixels", mapOf(
+                "data" to "inputImage",
+                "colour" to "outerPixelColour"
+            )
+        ),
+        Config.GenerationRule(
+            ApplyMask, "output", mapOf(
+                "data" to "outputImage",
+                "mask" to "matchingPixels",
+                "ifTrue" to "Water",
+                "ifFalse" to "Land"
             )
         )
     )

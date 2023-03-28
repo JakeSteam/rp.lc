@@ -34,14 +34,15 @@ Goal: A Kotlin project that can use a JSON config to apply image manipulation ru
 
 Goal: A Kotlin project that can generate worlds with tiles, structures, and game ticks based on input configs & tiles.
 
-- [ ] Support tile images
-  - [ ] Handle definition of 10x10 pixel art tile
-  - [ ] Scale to 10x size of output
 - [ ] Support context-dependent rules
-  - [ ] Organise current rules according to inputs & outputs
+  - [ ] Try and simplify rule architecture to avoid lots of interface requirements
+  - [ ] Organise current rules according to inputs & outputs & document in rules.md
   - [ ] Create "average R/G/B of up / down / left / right / all tiles" rules
   - [ ] Create "if tile x is (min, exactly, max) distance y away" rules
   - [ ] Use these for beach / deep sea tiles
+- [ ] Support tile images
+  - [ ] Handle definition of 10x10 pixel art tile
+  - [ ] Scale to 10x size of output
 - [ ] Support structures
   - [ ] Add ability to define generation rules for structures
   - [ ] Support 2nd stage of generation, based on tile input

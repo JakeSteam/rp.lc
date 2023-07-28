@@ -1,3 +1,6 @@
+> **Note**
+> Want to buy this domain? [Email me](jake@jakelee.co.uk)!
+
 # Replace (rp.lc)
 
 ## Q&A 

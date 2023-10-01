@@ -1,5 +1,5 @@
 > **Note**
-> Want to buy this domain? [Email me](jake@jakelee.co.uk)!
+> Want to buy this domain? [Email me](mailto:jake@jakelee.co.uk)!
 
 # Replace (rp.lc)
 
